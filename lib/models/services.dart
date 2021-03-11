@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 class MyServices {
   String serviceName;
   String serviceIcon;
@@ -8,20 +6,38 @@ class MyServices {
   List<MyServices> getServices() {
     return [
       MyServices(
-          serviceName: "Makeup", serviceIcon: 'assets/images/makeup.png'),
+          serviceName: ServiceType.makeup,
+          serviceIcon: 'assets/images/makeup.png'),
       MyServices(
-          serviceName: "Braiding", serviceIcon: 'assets/images/makeup.png'),
+          serviceName: ServiceType.braiding,
+          serviceIcon: 'assets/images/braiding.png'),
+      MyServices(serviceName: "Nails", serviceIcon: 'assets/images/nails.png'),
       MyServices(
-          serviceName: "Wig Caps", serviceIcon: 'assets/images/makeup.png'),
-      MyServices(serviceName: "Nails", serviceIcon: 'assets/images/makeup.png'),
+          serviceName: ServiceType.manicure,
+          serviceIcon: 'assets/images/manicure.png'),
       MyServices(
-          serviceName: "Manicure", serviceIcon: 'assets/images/makeup.png'),
+          serviceName: ServiceType.photoshoot,
+          serviceIcon: 'assets/images/camera.png'),
       MyServices(
-          serviceName: "Pedicure", serviceIcon: 'assets/images/makeup.png'),
+          serviceName: ServiceType.wigCup,
+          serviceIcon: 'assets/images/wigCup.png'),
       MyServices(
-          serviceName: "Fixing Wig", serviceIcon: 'assets/images/makeup.png'),
+          serviceName: ServiceType.manicure,
+          serviceIcon: 'assets/images/manicure.png'),
       MyServices(
-          serviceName: "Photoshoot", serviceIcon: 'assets/images/makeup.png')
+          serviceName: ServiceType.fixWig,
+          serviceIcon: 'assets/images/wig.png'),
     ];
   }
+}
+
+class ServiceType {
+  static String makeup = "Makeup";
+  static String braiding = "Braiding";
+  static String nails = "Nails";
+  static String manicure = "Manicure";
+  static String photoshoot = "Photoshoots";
+  static String wigCup = "Wig Caps";
+  static String pedicure = "Pedicure";
+  static String fixWig = "Fixing Wig";
 }

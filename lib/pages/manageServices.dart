@@ -12,7 +12,7 @@ class ManageServiceState extends State<ManageServices> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Management Services"),
+        title: Text("Manage Services"),
       ),
     );
   }

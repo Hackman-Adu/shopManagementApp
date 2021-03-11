@@ -2,9 +2,11 @@ import 'package:beautyShop/pages/managePayment.dart';
 import 'package:beautyShop/pages/manageServices.dart';
 import 'package:beautyShop/pages/settings.dart';
 import 'package:beautyShop/pages/summary.dart';
+import 'package:beautyShop/pages/viewCustomers.dart';
 import 'package:flutter/material.dart';
 import 'package:beautyShop/utils/utils.dart';
 import 'package:beautyShop/models/services.dart';
+import 'package:beautyShop/widgets/gridCard.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -51,6 +53,7 @@ class HomeState extends State<Home> {
       ),
       ListTile(
         onTap: () {
+          Navigator.pop(context);
           Utils.navigation(context: context, destination: ManageServices());
         },
         title: Text(
@@ -61,6 +64,7 @@ class HomeState extends State<Home> {
       ),
       ListTile(
         onTap: () {
+          Navigator.pop(context);
           Utils.navigation(context: context, destination: ManagePayments());
         },
         title: Text(
@@ -71,6 +75,7 @@ class HomeState extends State<Home> {
       ),
       ListTile(
         onTap: () {
+          Navigator.pop(context);
           Utils.navigation(context: context, destination: Summary());
         },
         title: Text(
@@ -81,6 +86,7 @@ class HomeState extends State<Home> {
       ),
       ListTile(
         onTap: () {
+          Navigator.pop(context);
           Utils.navigation(context: context, destination: SettingsPage());
         },
         title: Text(
@@ -110,13 +116,16 @@ class HomeState extends State<Home> {
         padding: EdgeInsets.symmetric(vertical: 4, horizontal: 14),
         child: Row(
           children: [
-            Icon(Icons.people_alt_rounded),
+            Icon(
+              Icons.people_alt_rounded,
+              size: 20,
+            ),
             SizedBox(
               width: 7,
             ),
-            Text("Manage Customers",
+            Text("Segmented Customers",
                 style: TextStyle(
-                    fontSize: 17,
+                    fontSize: 15,
                     fontWeight: FontWeight.w400,
                     color: Utils.kPrimaryColor.withOpacity(0.85))),
             Spacer(),
@@ -135,19 +144,27 @@ class HomeState extends State<Home> {
     );
   }
 
-  Widget buidListview() {
-    return ListView(shrinkWrap: true, children: [
-      ...this.services.map((service) {
-        return ListTile(
-            title: Text(service.serviceName),
-            trailing: Icon(Icons.chevron_right),
-            leading: Image(
-              width: 50,
-              height: 50,
-              image: AssetImage(service.serviceIcon),
-            ));
-      }).toList()
-    ]);
+  Widget buildGridView() {
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: BouncingScrollPhysics(),
+      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+          crossAxisSpacing: 1, mainAxisSpacing: 1, maxCrossAxisExtent: 300),
+      itemCount: this.services.length,
+      itemBuilder: (context, index) {
+        var service = this.services[index];
+        return GridCard(
+          function: () {
+            Utils.navigation(
+                context: context,
+                destination: ViewCustomers(
+                  selectedService: service.serviceName,
+                ));
+          },
+          service: service,
+        );
+      },
+    );
   }
 
   @override
@@ -165,7 +182,7 @@ class HomeState extends State<Home> {
         body: SingleChildScrollView(
           padding: EdgeInsets.symmetric(vertical: 17, horizontal: 10),
           child: Column(
-            children: [this.headerCard(), this.buidListview()],
+            children: [this.buildGridView()],
           ),
         ));
   }
