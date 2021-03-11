@@ -1,6 +1,6 @@
-import 'package:beautyShop/pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:beautyShop/utils/utils.dart';
+import 'package:beautyShop/pages/splashscreen.dart';
 
 void main() {
   runApp(MyApp());
@@ -17,6 +17,6 @@ class MyApp extends StatelessWidget {
           primaryColor: Utils.kPrimaryColor,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: Home());
+        home: SplashScreen());
   }
 }

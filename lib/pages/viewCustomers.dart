@@ -1,6 +1,7 @@
 import 'package:beautyShop/models/customers.dart';
 import 'package:flutter/material.dart';
 import 'package:beautyShop/utils/utils.dart';
+import 'dart:async';
 
 class ViewCustomers extends StatefulWidget {
   final String selectedService;
@@ -16,6 +17,7 @@ class ViewCustomerState extends State<ViewCustomers> {
   List<Customers> customers = [];
   List<Customers> allCustomers = [];
   int length = 0;
+  bool isLoading = true;
   ViewCustomerState({@required this.selectedService});
 
   Widget header() {
@@ -91,6 +93,7 @@ class ViewCustomerState extends State<ViewCustomers> {
   Widget listView() {
     return ListView(
       shrinkWrap: true,
+      physics: BouncingScrollPhysics(),
       children: [
         ...this.customers.map((customer) {
           return Column(
@@ -139,6 +142,11 @@ class ViewCustomerState extends State<ViewCustomers> {
   @override
   void initState() {
     super.initState();
+    Timer(Duration(milliseconds: 1000), () {
+      setState(() {
+        this.isLoading = false;
+      });
+    });
     this.customers = Customers().getCustomers().where((customer) {
       return customer.serviceType.toLowerCase() ==
           this.selectedService.toLowerCase();
@@ -153,18 +161,22 @@ class ViewCustomerState extends State<ViewCustomers> {
         appBar: AppBar(
           title: Text(selectedService),
         ),
-        body: length != 0
-            ? SingleChildScrollView(
-                child: Column(
-                  children: [header(), listView()],
-                ),
-              )
+        body: this.isLoading == false
+            ? length != 0
+                ? SingleChildScrollView(
+                    child: Column(
+                      children: [header(), listView()],
+                    ),
+                  )
+                : Center(
+                    child: Text(
+                      "No customers available\nfor ${this.selectedService}",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 14, color: Colors.grey),
+                    ),
+                  )
             : Center(
-                child: Text(
-                  "No customers available\nfor ${this.selectedService}",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 14, color: Colors.grey),
-                ),
+                child: Utils.spinner(),
               ));
   }
 }

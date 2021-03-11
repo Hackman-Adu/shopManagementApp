@@ -1,5 +1,6 @@
 import 'package:beautyShop/pages/managePayment.dart';
 import 'package:beautyShop/pages/manageServices.dart';
+import 'package:beautyShop/pages/newCustomer.dart';
 import 'package:beautyShop/pages/settings.dart';
 import 'package:beautyShop/pages/summary.dart';
 import 'package:beautyShop/pages/viewCustomers.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:beautyShop/utils/utils.dart';
 import 'package:beautyShop/models/services.dart';
 import 'package:beautyShop/widgets/gridCard.dart';
+import 'package:beautyShop/pages/login.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -16,7 +18,6 @@ class Home extends StatefulWidget {
 }
 
 class HomeState extends State<Home> {
-  bool isGridView = true;
   List<MyServices> services = MyServices().getServices();
   //generating the menu items
   List<Widget> menuItems() {
@@ -68,7 +69,7 @@ class HomeState extends State<Home> {
           Utils.navigation(context: context, destination: ManagePayments());
         },
         title: Text(
-          'Management Payments',
+          'Manage Payments',
           style: Utils.menuTextStyle(),
         ),
         leading: Icon(Icons.money_rounded),
@@ -97,7 +98,8 @@ class HomeState extends State<Home> {
       ),
       ListTile(
         onTap: () {
-          //logout
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => Login()));
         },
         title: Text(
           'Logout',
@@ -106,42 +108,6 @@ class HomeState extends State<Home> {
         leading: Icon(Icons.login_outlined),
       ),
     ];
-  }
-
-  Widget headerCard() {
-    return Card(
-      shadowColor: Colors.black.withOpacity(0.25),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(17)),
-      child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 4, horizontal: 14),
-        child: Row(
-          children: [
-            Icon(
-              Icons.people_alt_rounded,
-              size: 20,
-            ),
-            SizedBox(
-              width: 7,
-            ),
-            Text("Segmented Customers",
-                style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w400,
-                    color: Utils.kPrimaryColor.withOpacity(0.85))),
-            Spacer(),
-            IconButton(
-              splashRadius: 21,
-              onPressed: () {
-                setState(() {
-                  this.isGridView = !this.isGridView;
-                });
-              },
-              icon: Icon(this.isGridView ? Icons.dashboard : Icons.view_list),
-            )
-          ],
-        ),
-      ),
-    );
   }
 
   Widget buildGridView() {
@@ -179,8 +145,14 @@ class HomeState extends State<Home> {
             children: this.menuItems(),
           ),
         ),
+        floatingActionButton: Utils.customFloatingButton(
+            context: context,
+            text: "Add New Customer",
+            function: () {
+              Utils.navigation(context: context, destination: AddNewCustomer());
+            }),
         body: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(vertical: 17, horizontal: 10),
+          padding: EdgeInsets.only(left: 10, right: 10, top: 15, bottom: 30),
           child: Column(
             children: [this.buildGridView()],
           ),

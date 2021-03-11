@@ -7,17 +7,20 @@ class Customers {
   String address;
   String serviceType;
   String image;
+  String customerID;
   Customers(
       {this.fullName,
       this.emailAddress,
       this.telephone,
       this.address,
       this.serviceType,
+      this.customerID,
       this.image});
 
   List<Customers> getCustomers() {
     return [
       Customers(
+          customerID: "CUS001",
           fullName: "Belinda Appiah",
           emailAddress: "belindaappiah@gmail.com",
           telephone: "+233 248520036",
@@ -25,6 +28,7 @@ class Customers {
           image: "assets/images/girl3.jpg",
           serviceType: ServiceType.braiding),
       Customers(
+          customerID: "CUS002",
           fullName: "Jessica Lovial",
           emailAddress: "jessicalovia@gmail.com",
           telephone: "+233 248456789",
@@ -32,6 +36,7 @@ class Customers {
           image: "assets/images/girl2.jpg",
           serviceType: ServiceType.makeup),
       Customers(
+          customerID: "CUS003",
           fullName: "Gifty Akosua Gyebi",
           emailAddress: "giftygyebi@yahoo.com",
           telephone: "+233 245678989",
@@ -39,6 +44,7 @@ class Customers {
           image: "assets/images/girl5.jpg",
           serviceType: ServiceType.makeup),
       Customers(
+          customerID: "CUS004",
           fullName: "Lind Obeng Agyemang",
           emailAddress: "lindaagyemang@gmail.com",
           telephone: "+233 246789045",
@@ -46,6 +52,7 @@ class Customers {
           image: "assets/images/girl7.jpg",
           serviceType: ServiceType.makeup),
       Customers(
+          customerID: "CUS005",
           fullName: "Vivian Oteng",
           emailAddress: "vivianoteng@yahoo.com",
           telephone: "+233 247890989",
