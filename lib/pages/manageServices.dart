@@ -38,9 +38,9 @@ class ManageServiceState extends State<ManageServices> {
             padding: EdgeInsets.only(left: 16),
             child: Text("My Services",
                 style: TextStyle(
-                    fontSize: 18,
-                    color: Utils.kDarkPrimaryColor,
-                    fontFamily: Utils.family))),
+                  fontSize: 18,
+                  color: Utils.kDarkPrimaryColor,
+                ))),
         SizedBox(
           width: 7,
         ),
@@ -59,7 +59,19 @@ class ManageServiceState extends State<ManageServices> {
           return AlertDialog(
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(17)),
-              title: Text("Add New Service"),
+              title: Row(
+                children: [
+                  Text("Add New Service"),
+                  Spacer(),
+                  IconButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    splashRadius: 20,
+                    icon: Icon(Icons.cancel),
+                  )
+                ],
+              ),
               content: Form(
                 key: this.formKey,
                 child: Column(
@@ -89,6 +101,8 @@ class ManageServiceState extends State<ManageServices> {
                       text: "Save",
                       onClicked: () {
                         this.formKey.currentState.save();
+                        this.addedService.serviceIcon =
+                            "assets/images/makeup.png";
                         Navigator.of(context).pop(this.addedService);
                       },
                     )
@@ -128,12 +142,17 @@ class ManageServiceState extends State<ManageServices> {
           ? ListView(
               children: [
                 SizedBox(
-                  height: 25,
+                  height: 17,
                 ),
                 header(),
                 SizedBox(
-                  height: 21,
+                  height: 13,
                 ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: Divider(),
+                ),
+                SizedBox(height: 10),
                 ...this.services.map((service) {
                   return Column(
                     children: [
@@ -145,6 +164,8 @@ class ManageServiceState extends State<ManageServices> {
                               fontSize: 17,
                               color: Colors.black.withOpacity(0.85)),
                         ),
+                        leading: Image.asset(service.serviceIcon,
+                            height: 40, width: 40),
                         subtitle: Text(service.description ?? ''),
                         trailing: Icon(Icons.chevron_right),
                       ),

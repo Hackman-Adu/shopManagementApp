@@ -16,6 +16,7 @@ class Login extends StatefulWidget {
 class LoginState extends State<Login> with SingleTickerProviderStateMixin {
   var formKey = GlobalKey<FormState>();
   var key = GlobalKey<ScaffoldState>();
+  bool togglePasswordVisibility = true;
   AnimationController animationController;
   Animation animation;
   CurvedAnimation curve;
@@ -42,7 +43,7 @@ class LoginState extends State<Login> with SingleTickerProviderStateMixin {
   void initState() {
     super.initState();
     this.animationController = new AnimationController(
-        TickerProvider: this, duration: Duration(milliseconds: 250));
+        vsync: this, duration: Duration(milliseconds: 250));
     this.curve = new CurvedAnimation(
         curve: Curves.bounceIn, parent: this.animationController);
     this.animation = Tween<double>(begin: 0.0, end: 1.0).animate(curve);
@@ -92,7 +93,9 @@ class LoginState extends State<Login> with SingleTickerProviderStateMixin {
                           scale: this.animation,
                           child: Card(
                             elevation: 20,
-                            shadowColor: Colors.black.withOpacity(0.2),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            shadowColor: Colors.black.withOpacity(0.25),
                             child: Padding(
                               padding: EdgeInsets.symmetric(
                                   vertical: 10, horizontal: 10),
@@ -125,10 +128,25 @@ class LoginState extends State<Login> with SingleTickerProviderStateMixin {
                                         Icons.lock,
                                         color: Utils.kPrimaryColor,
                                       ),
-                                      isPassword: true,
+                                      isPassword: this.togglePasswordVisibility,
                                       action: TextInputAction.done,
                                       placeholder: "Enter your password",
-                                      hasTrailingIcon: false,
+                                      hasTrailingIcon: true,
+                                      trailingIcon: IconButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            this.togglePasswordVisibility =
+                                                !this.togglePasswordVisibility;
+                                          });
+                                        },
+                                        splashRadius: 20,
+                                        icon: Icon(
+                                          togglePasswordVisibility
+                                              ? Icons.visibility_off
+                                              : Icons.visibility,
+                                          color: Utils.kPrimaryColor,
+                                        ),
+                                      ),
                                     ),
                                     SizedBox(
                                       height: 20,
@@ -177,7 +195,7 @@ class LoginState extends State<Login> with SingleTickerProviderStateMixin {
                           padding: EdgeInsets.symmetric(
                               horizontal: 25, vertical: 10),
                           child: Text(
-                            "Divas Beauty Shop Management System.",
+                            "Divas Beauty Shop Management System. (Office Use Only)",
                             style: TextStyle(fontSize: 10, color: Colors.grey),
                           ),
                         )),

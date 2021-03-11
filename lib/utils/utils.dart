@@ -10,9 +10,9 @@ class Utils {
 
   static TextStyle menuTextStyle() {
     return TextStyle(
-        color: Colors.black.withOpacity(0.85),
-        fontSize: 15,
-        fontFamily: family);
+      color: Colors.black.withOpacity(0.80),
+      fontSize: 15,
+    );
   }
 
   static Widget spinner() {

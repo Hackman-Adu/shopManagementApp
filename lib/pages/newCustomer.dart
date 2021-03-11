@@ -104,11 +104,15 @@ class AddNewCustomerState extends State<AddNewCustomer> {
           child: Column(
             children: [
               SizedBox(
-                height: 31,
+                height: 10,
               ),
-              Text(
-                "All fields are required",
-                style: TextStyle(fontSize: 14, color: Utils.kPrimaryColor),
+              Container(
+                padding: EdgeInsets.only(left: 13),
+                width: double.infinity,
+                child: Text(
+                  "All fields are required",
+                  style: TextStyle(fontSize: 14, color: Utils.kPrimaryColor),
+                ),
               ),
               SizedBox(
                 height: 15,
