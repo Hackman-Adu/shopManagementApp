@@ -42,7 +42,7 @@ class LoginState extends State<Login> with SingleTickerProviderStateMixin {
   void initState() {
     super.initState();
     this.animationController = new AnimationController(
-        vsync: this, duration: Duration(milliseconds: 250));
+        TickerProvider: this, duration: Duration(milliseconds: 250));
     this.curve = new CurvedAnimation(
         curve: Curves.bounceIn, parent: this.animationController);
     this.animation = Tween<double>(begin: 0.0, end: 1.0).animate(curve);
