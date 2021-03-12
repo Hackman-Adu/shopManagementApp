@@ -16,6 +16,8 @@ class ManagePaymentState extends State<ManagePayments> {
   List<Customers> customers = Customers().getCustomers();
   String defaultFilter = "All";
   bool isLoading = true;
+
+  //initializing values for the filter options
   List<String> filterValues = [
     'All',
     'Today',
@@ -25,6 +27,8 @@ class ManagePaymentState extends State<ManagePayments> {
     'This Month',
     'Last Month'
   ];
+
+  //header widget
   Widget header() {
     return Row(
       children: [
@@ -57,6 +61,7 @@ class ManagePaymentState extends State<ManagePayments> {
     );
   }
 
+//displaying the bottom sheet
   Future<String> showFilterOptions(BuildContext context) async {
     return await showModalBottomSheet(
         shape: RoundedRectangleBorder(

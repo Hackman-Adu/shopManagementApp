@@ -22,6 +22,8 @@ class LoginState extends State<Login> with SingleTickerProviderStateMixin {
   CurvedAnimation curve;
   String username = "";
   String password = "";
+
+  //handling non-backend login
   void login() {
     this.formKey.currentState.save();
     if (this.username.trim() == '' || this.password.trim() == '') {

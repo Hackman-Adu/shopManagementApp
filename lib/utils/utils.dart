@@ -3,11 +3,13 @@ import 'package:flutter/cupertino.dart';
 import 'dart:io';
 
 class Utils {
-  static const Color kPrimaryColor = Color(0XFFFA13E97);
-  static const Color kDarkPrimaryColor = Color(0XFFF280e3b);
+  //constant values
+  static const Color kPrimaryColor = Color(0XFFF7f0a49);
+  static const Color kDarkPrimaryColor = Color(0XFFF4c062c);
   static const String shopName = "Divas Beauty Shop";
   static const String family = "ShipporiMincho-Regular";
 
+//static style for the menu(Navigation drawer) items
   static TextStyle menuTextStyle() {
     return TextStyle(
       color: Colors.black.withOpacity(0.80),
@@ -15,6 +17,7 @@ class Utils {
     );
   }
 
+//platform specific loading spinner
   static Widget spinner() {
     return Platform.isAndroid
         ? CircularProgressIndicator(
@@ -25,6 +28,7 @@ class Utils {
           );
   }
 
+//platform specific action alert(Yes or No Alert)
   static Future<bool> actionAlert(
       {BuildContext context,
       String title,
@@ -77,6 +81,7 @@ class Utils {
             });
   }
 
+//platform specific simple alert(With just Okay Button)
   static simpleAlert(
       {BuildContext context,
       String title,
@@ -114,6 +119,7 @@ class Utils {
             });
   }
 
+//android loadingDialog spinner
   static androidLoadingSpinner(BuildContext context, {String text}) {
     showDialog(
         barrierDismissible: false,
@@ -144,6 +150,7 @@ class Utils {
     ));
   }
 
+//custom floating action button
   static Widget customFloatingButton(
       {BuildContext context, Function function, String text}) {
     return FloatingActionButton.extended(
@@ -170,6 +177,7 @@ class Utils {
     );
   }
 
+//iOSloadingDialog spinner
   static iOSLoadingSpinner(BuildContext context, {String text}) {
     showCupertinoDialog(
         barrierDismissible: false,
@@ -190,6 +198,7 @@ class Utils {
         });
   }
 
+//static method to handle page navigation across the app
   static void navigation(
       {@required BuildContext context, @required Widget destination}) {
     Navigator.push(

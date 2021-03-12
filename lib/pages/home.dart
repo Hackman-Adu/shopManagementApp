@@ -18,8 +18,10 @@ class Home extends StatefulWidget {
 }
 
 class HomeState extends State<Home> {
+  //list of My Services model
   List<MyServices> services = MyServices().getServices();
-  //generating the menu items
+
+//Navigation drawer items
   List<Widget> menuItems() {
     return [
       //header
@@ -38,9 +40,9 @@ class HomeState extends State<Home> {
                 colorFilter: ColorFilter.mode(
                     Utils.kPrimaryColor.withOpacity(0.56), BlendMode.multiply),
                 image: AssetImage("assets/images/menuBackground.jpg"))),
-      )
-      //items
-      ,
+      ),
+
+      //defining items in the navigation drawer
       ListTile(
         onTap: () {
           //do nothing here close the drawer
@@ -117,6 +119,7 @@ class HomeState extends State<Home> {
     ];
   }
 
+//header widget
   Widget header() {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 10),
@@ -155,6 +158,7 @@ class HomeState extends State<Home> {
     );
   }
 
+//creating the gridview
   Widget buildGridView() {
     return GridView.builder(
       shrinkWrap: true,
@@ -178,6 +182,7 @@ class HomeState extends State<Home> {
     );
   }
 
+//main build method
   @override
   Widget build(BuildContext context) {
     return Scaffold(

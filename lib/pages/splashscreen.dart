@@ -28,8 +28,8 @@ class SplashScreenState extends State<SplashScreen> {
         height: height,
         decoration: BoxDecoration(
             image: DecorationImage(
-                colorFilter:
-                    ColorFilter.mode(Utils.kPrimaryColor, BlendMode.modulate),
+                colorFilter: ColorFilter.mode(
+                    Colors.black.withOpacity(0.5), BlendMode.multiply),
                 fit: BoxFit.cover,
                 image: AssetImage("assets/images/pageBackground.jpg"))),
         width: double.infinity,

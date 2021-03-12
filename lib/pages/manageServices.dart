@@ -31,6 +31,7 @@ class ManageServiceState extends State<ManageServices> {
     });
   }
 
+//header widget
   Widget header() {
     return Row(
       children: [
@@ -52,6 +53,7 @@ class ManageServiceState extends State<ManageServices> {
     );
   }
 
+//displaying the add new service alert dialog
   Future<MyServices> addNewService() async {
     return showDialog(
         context: context,

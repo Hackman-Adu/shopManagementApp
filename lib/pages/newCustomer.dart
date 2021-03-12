@@ -20,6 +20,7 @@ class AddNewCustomerState extends State<AddNewCustomer> {
     );
   }
 
+//generating inputfields for the add new customer form
   List<Widget> generateInputFields() {
     return [
       CustomFormField(
