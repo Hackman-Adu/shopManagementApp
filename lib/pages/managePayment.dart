@@ -3,6 +3,7 @@ import 'package:beautyShop/utils/utils.dart';
 import 'package:beautyShop/models/payments.dart';
 import 'package:beautyShop/models/customers.dart';
 import 'dart:async';
+import 'package:beautyShop/pages/paymentReport.dart';
 
 class ManagePayments extends StatefulWidget {
   @override
@@ -126,6 +127,74 @@ class ManagePaymentState extends State<ManagePayments> {
     });
   }
 
+//custom listTile
+  Widget buildListTile(BuildContext context, Payments payment) {
+    var customerName = this.customers[this.payments.indexOf(payment)].fullName;
+    var customerImage = this.customers[this.payments.indexOf(payment)].image;
+    return Padding(
+        padding: EdgeInsets.symmetric(horizontal: 4),
+        child: InkWell(
+            onTap: () {
+              Utils.navigation(context: context, destination: PaymentReport());
+            },
+            borderRadius: BorderRadius.circular(7),
+            child: Card(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(7)),
+              elevation: 25,
+              shadowColor: Colors.black.withOpacity(0.2),
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 7, horizontal: 7),
+                child: Row(
+                  children: [
+                    Container(
+                      height: 60,
+                      width: 60,
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                              fit: BoxFit.cover,
+                              image: AssetImage(customerImage)),
+                          shape: BoxShape.circle),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            customerName,
+                            style: TextStyle(
+                                fontSize: 18, color: Utils.kDarkPrimaryColor),
+                          ),
+                          SizedBox(
+                            height: 3,
+                          ),
+                          Text(
+                            payment.date,
+                            style: TextStyle(
+                                fontSize: 14, color: Utils.kPrimaryColor),
+                          )
+                        ],
+                      ),
+                    ),
+                    Text(
+                      "GHC " + payment.amount,
+                      style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: Utils.kDarkPrimaryColor),
+                    ),
+                    SizedBox(
+                      width: 4,
+                    )
+                  ],
+                ),
+              ),
+            )));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -139,50 +208,10 @@ class ManagePaymentState extends State<ManagePayments> {
                   height: 5,
                 ),
                 header(),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
-                  child: Divider(),
-                ),
-                SizedBox(
-                  height: 13,
-                ),
                 ...this.payments.map((payment) {
-                  var customerName =
-                      this.customers[this.payments.indexOf(payment)].fullName;
-                  var customerImage =
-                      this.customers[this.payments.indexOf(payment)].image;
                   return Column(
                     children: [
-                      ListTile(
-                          onTap: () {},
-                          title: Text(
-                            customerName,
-                            style: TextStyle(
-                                fontSize: 17,
-                                color: Colors.black.withOpacity(0.85)),
-                          ),
-                          subtitle: Text(
-                            payment.date ?? '',
-                            style: TextStyle(color: Utils.kPrimaryColor),
-                          ),
-                          leading: CircleAvatar(
-                            backgroundImage: AssetImage(customerImage),
-                          ),
-                          trailing: Container(
-                            width: 100,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(17),
-                                color: Utils.kPrimaryColor),
-                            padding: EdgeInsets.all(10),
-                            child: Center(
-                              child: Text(
-                                "GHC " + payment.amount,
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontFamily: Utils.family),
-                              ),
-                            ),
-                          )),
+                      this.buildListTile(context, payment),
                       Padding(
                         padding: EdgeInsets.only(left: 16),
                         child: Divider(),

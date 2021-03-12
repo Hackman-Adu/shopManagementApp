@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 
-class SettingsPage extends StatefulWidget {
+class PaymentReport extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return SettingsPageState();
+    return PaymentReportState();
   }
 }
 
-class SettingsPageState extends State<SettingsPage> {
+class PaymentReportState extends State<PaymentReport> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Settings"),
+        title: Text("Payment Report"),
       ),
       body: Center(
-        child: Text("Settings"),
+        child: Text("Payment Report"),
       ),
     );
   }

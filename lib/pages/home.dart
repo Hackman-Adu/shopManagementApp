@@ -2,7 +2,7 @@ import 'package:beautyShop/pages/managePayment.dart';
 import 'package:beautyShop/pages/manageServices.dart';
 import 'package:beautyShop/pages/newCustomer.dart';
 import 'package:beautyShop/pages/settings.dart';
-import 'package:beautyShop/pages/summary.dart';
+import 'package:beautyShop/pages/reports.dart';
 import 'package:beautyShop/pages/viewCustomers.dart';
 import 'package:flutter/material.dart';
 import 'package:beautyShop/utils/utils.dart';
@@ -82,10 +82,10 @@ class HomeState extends State<Home> {
           Utils.navigation(context: context, destination: Summary());
         },
         title: Text(
-          'Summary',
+          'Reports',
           style: Utils.menuTextStyle(),
         ),
-        leading: Icon(Icons.supervisor_account_rounded),
+        leading: Icon(Icons.sticky_note_2_rounded),
       ),
       ListTile(
         onTap: () {
