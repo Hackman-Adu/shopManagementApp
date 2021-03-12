@@ -2,6 +2,7 @@ import 'package:beautyShop/models/customers.dart';
 import 'package:flutter/material.dart';
 import 'package:beautyShop/utils/utils.dart';
 import 'dart:async';
+import 'package:beautyShop/pages/customerProfile.dart';
 
 class ViewCustomers extends StatefulWidget {
   final String selectedService;
@@ -99,7 +100,13 @@ class ViewCustomerState extends State<ViewCustomers> {
           return Column(
             children: [
               ListTile(
-                  onTap: () {},
+                  onTap: () {
+                    Utils.navigation(
+                        context: context,
+                        destination: CustomerProfile(
+                          customer: customer,
+                        ));
+                  },
                   title: Text(
                     customer.fullName,
                     style: TextStyle(
@@ -142,7 +149,7 @@ class ViewCustomerState extends State<ViewCustomers> {
   @override
   void initState() {
     super.initState();
-    Timer(Duration(milliseconds: 1000), () {
+    Timer(Duration(milliseconds: 500), () {
       setState(() {
         this.isLoading = false;
       });

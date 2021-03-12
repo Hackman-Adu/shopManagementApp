@@ -97,9 +97,16 @@ class HomeState extends State<Home> {
         leading: Icon(Icons.settings),
       ),
       ListTile(
-        onTap: () {
-          Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => Login()));
+        onTap: () async {
+          Navigator.of(context).pop();
+          bool value = await Utils.actionAlert(
+              content: "Do you want to logout?",
+              context: context,
+              title: "Logout");
+          if (value == true) {
+            Navigator.pushReplacement(
+                context, MaterialPageRoute(builder: (context) => Login()));
+          }
         },
         title: Text(
           'Logout',
@@ -108,6 +115,44 @@ class HomeState extends State<Home> {
         leading: Icon(Icons.login_outlined),
       ),
     ];
+  }
+
+  Widget header() {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Categorized Customers",
+                style: TextStyle(fontSize: 21, color: Utils.kDarkPrimaryColor),
+              ),
+              Text(
+                "Customers categorized according to services",
+                style: TextStyle(
+                    fontSize: 13,
+                    color: Utils.kPrimaryColor,
+                    fontFamily: Utils.family),
+              )
+            ],
+          ),
+          Spacer(),
+          Container(
+            height: 30,
+            width: 30,
+            child: Center(
+              child:
+                  Icon(Icons.people_alt_rounded, color: Colors.white, size: 17),
+            ),
+            decoration: BoxDecoration(
+                color: Utils.kDarkPrimaryColor, shape: BoxShape.circle),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget buildGridView() {
@@ -154,7 +199,20 @@ class HomeState extends State<Home> {
         body: SingleChildScrollView(
           padding: EdgeInsets.only(left: 10, right: 10, top: 15, bottom: 30),
           child: Column(
-            children: [this.buildGridView()],
+            children: [
+              SizedBox(
+                height: 7,
+              ),
+              this.header(),
+              SizedBox(
+                height: 7,
+              ),
+              Divider(),
+              SizedBox(
+                height: 4,
+              ),
+              this.buildGridView()
+            ],
           ),
         ));
   }

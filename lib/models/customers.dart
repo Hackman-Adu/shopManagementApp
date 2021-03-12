@@ -8,6 +8,8 @@ class Customers {
   String serviceType;
   String image;
   String customerID;
+  String lastPurchase;
+  bool isActive;
   Customers(
       {this.fullName,
       this.emailAddress,
@@ -15,11 +17,15 @@ class Customers {
       this.address,
       this.serviceType,
       this.customerID,
+      this.lastPurchase,
+      this.isActive,
       this.image});
 
   List<Customers> getCustomers() {
     return [
       Customers(
+          isActive: true,
+          lastPurchase: "February 24, 2021",
           customerID: "CUS001",
           fullName: "Belinda Appiah",
           emailAddress: "belindaappiah@gmail.com",
@@ -28,6 +34,8 @@ class Customers {
           image: "assets/images/girl3.jpg",
           serviceType: ServiceType.braiding),
       Customers(
+          isActive: true,
+          lastPurchase: "January 24, 2021",
           customerID: "CUS002",
           fullName: "Jessica Lovial",
           emailAddress: "jessicalovia@gmail.com",
@@ -36,6 +44,8 @@ class Customers {
           image: "assets/images/girl2.jpg",
           serviceType: ServiceType.makeup),
       Customers(
+          isActive: false,
+          lastPurchase: "January 21, 2021",
           customerID: "CUS003",
           fullName: "Gifty Akosua Gyebi",
           emailAddress: "giftygyebi@yahoo.com",
@@ -44,6 +54,8 @@ class Customers {
           image: "assets/images/girl5.jpg",
           serviceType: ServiceType.makeup),
       Customers(
+          isActive: false,
+          lastPurchase: "March 10, 2021",
           customerID: "CUS004",
           fullName: "Lind Obeng Agyemang",
           emailAddress: "lindaagyemang@gmail.com",
@@ -52,6 +64,8 @@ class Customers {
           image: "assets/images/girl7.jpg",
           serviceType: ServiceType.makeup),
       Customers(
+          isActive: true,
+          lastPurchase: "February 24, 2021",
           customerID: "CUS005",
           fullName: "Vivian Oteng",
           emailAddress: "vivianoteng@yahoo.com",

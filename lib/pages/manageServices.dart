@@ -57,6 +57,7 @@ class ManageServiceState extends State<ManageServices> {
         context: context,
         builder: (context) {
           return AlertDialog(
+              scrollable: true,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(17)),
               title: Row(

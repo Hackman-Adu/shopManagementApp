@@ -25,8 +25,13 @@ class LoginState extends State<Login> with SingleTickerProviderStateMixin {
   void login() {
     this.formKey.currentState.save();
     if (this.username.trim() == '' || this.password.trim() == '') {
-      Utils.showSnackBar(key, "Please username and password are required",
-          duration: 1500);
+      Utils.simpleAlert(
+          context: context,
+          title: "Empty",
+          okayPressed: () {
+            Navigator.of(context).pop();
+          },
+          content: "Password and username are required");
       return;
     }
     Platform.isAndroid
@@ -173,9 +178,7 @@ class LoginState extends State<Login> with SingleTickerProviderStateMixin {
                         child: Center(
                           child: InkWell(
                               borderRadius: BorderRadius.circular(10),
-                              onTap: () {
-                                print("password");
-                              },
+                              onTap: () {},
                               child: Padding(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 25, vertical: 10),
@@ -195,8 +198,11 @@ class LoginState extends State<Login> with SingleTickerProviderStateMixin {
                           padding: EdgeInsets.symmetric(
                               horizontal: 25, vertical: 10),
                           child: Text(
-                            "Divas Beauty Shop Management System. (Office Use Only)",
-                            style: TextStyle(fontSize: 10, color: Colors.grey),
+                            "Divas Beauty Shop Management\nSystem. (Office Use Only)",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 10,
+                                color: Colors.white.withOpacity(0.65)),
                           ),
                         )),
                         width: double.infinity,

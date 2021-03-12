@@ -25,6 +25,95 @@ class Utils {
           );
   }
 
+  static Future<bool> actionAlert(
+      {BuildContext context,
+      String title,
+      String content,
+      bool hasTwoActions = false}) {
+    return Platform.isAndroid
+        ? showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text(title),
+                content: Text(content),
+                actions: [
+                  FlatButton(
+                    onPressed: () {
+                      Navigator.of(context).pop(true);
+                    },
+                    child: Text("Yes"),
+                  ),
+                  FlatButton(
+                    onPressed: () {
+                      Navigator.of(context).pop(false);
+                    },
+                    child: Text("No"),
+                  )
+                ],
+              );
+            })
+        : showCupertinoDialog(
+            context: context,
+            builder: (context) {
+              return CupertinoAlertDialog(
+                title: Text(title),
+                content: Text(content),
+                actions: [
+                  CupertinoDialogAction(
+                    onPressed: () {
+                      Navigator.of(context).pop(true);
+                    },
+                    child: Text("Yes"),
+                  ),
+                  CupertinoDialogAction(
+                    onPressed: () {
+                      Navigator.of(context).pop(false);
+                    },
+                    child: Text("No"),
+                  )
+                ],
+              );
+            });
+  }
+
+  static simpleAlert(
+      {BuildContext context,
+      String title,
+      String content,
+      Function okayPressed,
+      bool hasTwoActions = false}) {
+    Platform.isAndroid
+        ? showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text(title),
+                content: Text(content),
+                actions: [
+                  FlatButton(
+                    onPressed: okayPressed,
+                    child: Text("Okay"),
+                  )
+                ],
+              );
+            })
+        : showCupertinoDialog(
+            context: context,
+            builder: (context) {
+              return CupertinoAlertDialog(
+                title: Text(title),
+                content: Text(content),
+                actions: [
+                  CupertinoDialogAction(
+                    onPressed: okayPressed,
+                    child: Text("Okay"),
+                  )
+                ],
+              );
+            });
+  }
+
   static androidLoadingSpinner(BuildContext context, {String text}) {
     showDialog(
         barrierDismissible: false,
