@@ -17,6 +17,12 @@ class Utils {
     );
   }
 
+  static void showpinnerDialog({String text, BuildContext context}) {
+    Platform.isAndroid
+        ? androidLoadingSpinner(context, text: text)
+        : iOSLoadingSpinner(context, text: text);
+  }
+
 //platform specific loading spinner
   static Widget spinner() {
     return Platform.isAndroid
@@ -42,13 +48,13 @@ class Utils {
                 title: Text(title),
                 content: Text(content),
                 actions: [
-                  FlatButton(
+                  TextButton(
                     onPressed: () {
                       Navigator.of(context).pop(true);
                     },
                     child: Text("Yes"),
                   ),
-                  FlatButton(
+                  TextButton(
                     onPressed: () {
                       Navigator.of(context).pop(false);
                     },
@@ -82,12 +88,12 @@ class Utils {
   }
 
 //platform specific simple alert(With just Okay Button)
-  static simpleAlert(
-      {BuildContext context,
-      String title,
-      String content,
-      Function okayPressed,
-      bool hasTwoActions = false}) {
+  static simpleAlert({
+    BuildContext context,
+    String title,
+    String content,
+    Function okayPressed,
+  }) {
     Platform.isAndroid
         ? showDialog(
             context: context,
@@ -96,7 +102,7 @@ class Utils {
                 title: Text(title),
                 content: Text(content),
                 actions: [
-                  FlatButton(
+                  TextButton(
                     onPressed: okayPressed,
                     child: Text("Okay"),
                   )
@@ -142,7 +148,7 @@ class Utils {
         });
   }
 
-  static showSnackBar(GlobalKey<ScaffoldState> key, String content,
+  static showSnackBar(GlobalKey<ScaffoldMessengerState> key, String content,
       {int duration = 500}) {
     key.currentState.showSnackBar(SnackBar(
       content: Text(content),

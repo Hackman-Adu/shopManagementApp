@@ -14,7 +14,7 @@ class CustomFormField extends StatelessWidget {
       this.trailingIcon,
       this.placeholder,
       this.onSaved,
-      this.type,
+      this.type = TextInputType.text,
       this.isPassword = false,
       this.action,
       this.hasTrailingIcon = false});

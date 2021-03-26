@@ -18,7 +18,7 @@ class ManageServiceState extends State<ManageServices> {
   MyServices addedService;
   var formKey = GlobalKey<FormState>();
   bool isLoading = true;
-  var key = GlobalKey<ScaffoldState>();
+  var key = GlobalKey<ScaffoldMessengerState>();
 
   @override
   void initState() {

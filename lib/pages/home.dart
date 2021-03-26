@@ -1,14 +1,15 @@
+import 'package:beautyShop/controllers/customersController.dart';
 import 'package:beautyShop/pages/managePayment.dart';
 import 'package:beautyShop/pages/manageServices.dart';
 import 'package:beautyShop/pages/newCustomer.dart';
 import 'package:beautyShop/pages/settings.dart';
 import 'package:beautyShop/pages/reports.dart';
-import 'package:beautyShop/pages/viewCustomers.dart';
 import 'package:flutter/material.dart';
 import 'package:beautyShop/utils/utils.dart';
-import 'package:beautyShop/models/services.dart';
-import 'package:beautyShop/widgets/gridCard.dart';
 import 'package:beautyShop/pages/login.dart';
+import 'package:provider/provider.dart';
+import '../models/customers.dart';
+import 'package:beautyShop/pages/customerProfile.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -18,9 +19,6 @@ class Home extends StatefulWidget {
 }
 
 class HomeState extends State<Home> {
-  //list of My Services model
-  List<MyServices> services = MyServices().getServices();
-
 //Navigation drawer items
   List<Widget> menuItems() {
     return [
@@ -119,6 +117,36 @@ class HomeState extends State<Home> {
     ];
   }
 
+//build customersList
+  Widget customersList(List<Customers> customers) {
+    return ListView(
+      shrinkWrap: true,
+      physics: BouncingScrollPhysics(),
+      children: [
+        ...customers.map((customer) {
+          return ListTile(
+            onTap: () {
+              Utils.navigation(
+                  context: context,
+                  destination: CustomerProfile(
+                    customer: customer,
+                  ));
+            },
+            title: Text(customer.fullName),
+            subtitle: Text(customer.address),
+            leading: Container(
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        fit: BoxFit.cover, image: AssetImage(customer.image)),
+                    shape: BoxShape.circle),
+                width: 50,
+                height: 50),
+          );
+        }).toList()
+      ],
+    );
+  }
+
 //header widget
   Widget header() {
     return Padding(
@@ -126,68 +154,33 @@ class HomeState extends State<Home> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Categorized Customers",
-                style: TextStyle(fontSize: 21, color: Utils.kDarkPrimaryColor),
-              ),
-              Text(
-                "Customers categorized according to services",
-                style: TextStyle(
-                    fontSize: 13,
-                    color: Utils.kPrimaryColor,
-                    fontFamily: Utils.family),
-              )
-            ],
+          Text(
+            "My Customers",
+            style: TextStyle(fontSize: 17, color: Utils.kDarkPrimaryColor),
           ),
           Spacer(),
-          Container(
-            height: 30,
-            width: 30,
-            child: Center(
-              child:
-                  Icon(Icons.people_alt_rounded, color: Colors.white, size: 17),
-            ),
-            decoration: BoxDecoration(
-                color: Utils.kDarkPrimaryColor, shape: BoxShape.circle),
-          ),
+          Consumer<CustomersControllers>(builder: (context, controller, child) {
+            return Text(
+              "(${controller.customers.length})",
+              style: TextStyle(fontSize: 14, color: Colors.grey),
+            );
+          })
         ],
       ),
-    );
-  }
-
-//creating the gridview
-  Widget buildGridView() {
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: BouncingScrollPhysics(),
-      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-          crossAxisSpacing: 1, mainAxisSpacing: 1, maxCrossAxisExtent: 300),
-      itemCount: this.services.length,
-      itemBuilder: (context, index) {
-        var service = this.services[index];
-        return GridCard(
-          function: () {
-            Utils.navigation(
-                context: context,
-                destination: ViewCustomers(
-                  selectedService: service.serviceName,
-                ));
-          },
-          service: service,
-        );
-      },
     );
   }
 
 //main build method
   @override
   Widget build(BuildContext context) {
+    var controller = Provider.of<CustomersControllers>(context);
     return Scaffold(
         appBar: AppBar(
           title: Text(Utils.shopName),
+          actions: [
+            IconButton(
+                splashRadius: 20, icon: Icon(Icons.search), onPressed: () {})
+          ],
         ),
         drawer: Drawer(
           child: ListView(
@@ -201,24 +194,31 @@ class HomeState extends State<Home> {
             function: () {
               Utils.navigation(context: context, destination: AddNewCustomer());
             }),
-        body: SingleChildScrollView(
-          padding: EdgeInsets.only(left: 10, right: 10, top: 15, bottom: 30),
-          child: Column(
-            children: [
-              SizedBox(
-                height: 7,
-              ),
-              this.header(),
-              SizedBox(
-                height: 7,
-              ),
-              Divider(),
-              SizedBox(
-                height: 4,
-              ),
-              this.buildGridView()
-            ],
-          ),
-        ));
+        body: controller.isLoading == false
+            ? SingleChildScrollView(
+                padding: EdgeInsets.only(top: 15, bottom: 30),
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 7,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      child: this.header(),
+                    ),
+                    SizedBox(
+                      height: 7,
+                    ),
+                    Divider(),
+                    SizedBox(
+                      height: 4,
+                    ),
+                    this.customersList(controller.customers)
+                  ],
+                ),
+              )
+            : Center(
+                child: Utils.spinner(),
+              ));
   }
 }

@@ -5,7 +5,7 @@ import 'dart:async';
 
 class CustomerProfile extends StatefulWidget {
   final Customers customer;
-  CustomerProfile({this.customer, Key key}) : super(key: key);
+  CustomerProfile({this.customer});
   @override
   State<StatefulWidget> createState() {
     return CustomerProfileState(customer: this.customer);
@@ -18,7 +18,7 @@ class CustomerProfileState extends State<CustomerProfile> {
   CustomerProfileState({this.customer});
   Widget buildProfileImage() {
     return Stack(
-      overflow: Overflow.visible,
+      clipBehavior: Clip.none,
       alignment: Alignment.topRight,
       children: [
         CircleAvatar(

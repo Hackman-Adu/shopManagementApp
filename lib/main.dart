@@ -1,9 +1,14 @@
+import 'package:beautyShop/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:beautyShop/utils/utils.dart';
 import 'package:beautyShop/pages/splashscreen.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(MultiProvider(
+    providers: Providers.providers(),
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -14,6 +19,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Divas Beauty Shop',
         theme: ThemeData(
+          appBarTheme: AppBarTheme(brightness: Brightness.dark),
           primaryColor: Utils.kPrimaryColor,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
