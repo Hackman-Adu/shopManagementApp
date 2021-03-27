@@ -1,6 +1,11 @@
+import 'dart:async';
+
 import 'package:beautyShop/controllers/customersController.dart';
+import 'package:beautyShop/controllers/paymentController.dart';
 import 'package:beautyShop/controllers/serviceController.dart';
+import 'package:beautyShop/models/customers.dart';
 import 'package:beautyShop/models/payments.dart';
+import 'package:beautyShop/pages/newCustomer.dart';
 import 'package:beautyShop/utils/utils.dart';
 import 'package:beautyShop/widgets/borderTextField.dart';
 import 'package:beautyShop/widgets/customButton.dart';
@@ -8,13 +13,19 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class AddNewPayment extends StatefulWidget {
+  final String route;
+  final Customers customer;
+  AddNewPayment({@required this.route, this.customer});
   @override
   State<StatefulWidget> createState() {
-    return AddNewPaymentState();
+    return AddNewPaymentState(route: this.route, customer: this.customer);
   }
 }
 
 class AddNewPaymentState extends State<AddNewPayment> {
+  final String route;
+  final Customers customer;
+  AddNewPaymentState({@required this.route, this.customer});
   var formKey = GlobalKey<FormState>();
   Payments payment = new Payments();
   TextEditingController customerID = new TextEditingController();
@@ -25,6 +36,21 @@ class AddNewPaymentState extends State<AddNewPayment> {
     return SizedBox(
       height: height,
     );
+  }
+
+  void addingNewPayment() {
+    this.payment.date = new DateTime.now().toString();
+    Provider.of<PaymentController>(context, listen: false)
+        .addNewPayment(payment);
+    Utils.showpinnerDialog(context: context, text: 'Adding New Payment...');
+    Timer(Duration(milliseconds: 500), () {
+      this.formKey.currentState.reset();
+      Navigator.of(context).pop();
+      Utils.simpleAlert(
+          context: context,
+          content: "Payment successfully Added",
+          title: "New Payment");
+    });
   }
 
   void showServices() {
@@ -40,6 +66,9 @@ class AddNewPaymentState extends State<AddNewPayment> {
                     .services
                     .map((service) {
                   return ListTile(
+                      trailing: service.serviceName == this.service.text
+                          ? Utils.checkBox()
+                          : Text(''),
                       onTap: () {
                         Navigator.of(context).pop();
                         this.service.text = service.serviceName;
@@ -59,12 +88,26 @@ class AddNewPaymentState extends State<AddNewPayment> {
           return Container(
             height: MediaQuery.of(context).size.height * 0.9,
             child: ListView(
+              padding: EdgeInsets.only(top: 10),
               shrinkWrap: true,
               children: [
                 ...Provider.of<CustomersControllers>(context)
                     .customers
                     .map((customer) {
                   return ListTile(
+                      trailing: customer.customerID == this.customerID.text
+                          ? Utils.checkBox()
+                          : Text(''),
+                      leading: customer.image != ''
+                          ? CircleAvatar(
+                              backgroundImage: AssetImage(customer.image),
+                            )
+                          : CircleAvatar(
+                              child: Center(
+                                child:
+                                    Text(Utils.getInitials(customer.fullName)),
+                              ),
+                            ),
                       onTap: () {
                         Navigator.of(context).pop();
                         this.customerID.text = customer.customerID;
@@ -96,6 +139,7 @@ class AddNewPaymentState extends State<AddNewPayment> {
           this.showCustomers();
         },
         isReadOnly: true,
+        isEnabled: this.route == 'profile' ? false : true,
         onSaved: (value) {
           this.payment.customerID = value;
         },
@@ -153,6 +197,7 @@ class AddNewPaymentState extends State<AddNewPayment> {
         onClicked: () {
           if (this.formKey.currentState.validate()) {
             this.formKey.currentState.save();
+            this.addingNewPayment();
           }
         },
       ),
@@ -164,16 +209,27 @@ class AddNewPaymentState extends State<AddNewPayment> {
     return Row(
       children: [
         SizedBox(width: 8.5),
-        Icon(Icons.payment_rounded,
-            size: 45, color: Utils.kPrimaryColor.withOpacity(0.75)),
+        Icon(Icons.payment_rounded, size: 45, color: Utils.kPrimaryColor),
         SizedBox(width: 7),
         Text(
           "Add New Payment",
-          style: TextStyle(
-              fontSize: 17, color: Utils.kPrimaryColor.withOpacity(0.75)),
+          style: TextStyle(fontSize: 17, color: Utils.kPrimaryColor),
         ),
       ],
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    this.initValues();
+  }
+
+  initValues() {
+    if (this.route == 'profile') {
+      this.customerID.text = this.customer.customerID;
+      this.customerFullName.text = this.customer.fullName;
+    }
   }
 
   @override
@@ -181,6 +237,15 @@ class AddNewPaymentState extends State<AddNewPayment> {
     return Scaffold(
         appBar: AppBar(
           title: Text("New Payment"),
+          actions: [
+            IconButton(
+                splashRadius: 20,
+                icon: Icon(Icons.person_add_alt_1_rounded),
+                onPressed: () {
+                  Utils.navigation(
+                      context: context, destination: AddNewCustomer());
+                })
+          ],
         ),
         body: SingleChildScrollView(
           padding: EdgeInsets.symmetric(vertical: 10, horizontal: 4),

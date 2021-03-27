@@ -1,3 +1,4 @@
+import 'package:beautyShop/pages/dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:beautyShop/utils/utils.dart';
 import 'package:beautyShop/widgets/textField.dart';
@@ -36,7 +37,7 @@ class LoginState extends State<Login> with SingleTickerProviderStateMixin {
     Timer(Duration(milliseconds: 1000), () {
       Navigator.of(context).pop();
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => Home()));
+          context, MaterialPageRoute(builder: (context) => DashBoard()));
     });
   }
 
@@ -104,22 +105,6 @@ class LoginState extends State<Login> with SingleTickerProviderStateMixin {
           ),
         ],
       ),
-    );
-  }
-
-  Widget bottomText() {
-    return Container(
-      margin: EdgeInsets.only(bottom: 10, top: 30),
-      child: Center(
-          child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-        child: Text(
-          "Divas Beauty Shop Management\nSystem. (Office Use Only)",
-          textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 10, color: Colors.white.withOpacity(0.65)),
-        ),
-      )),
-      width: double.infinity,
     );
   }
 
@@ -208,7 +193,7 @@ class LoginState extends State<Login> with SingleTickerProviderStateMixin {
                         height: 10,
                       ),
                       this.forgotPassword(),
-                      this.bottomText()
+                      Utils.bottomText()
                     ],
                   )),
             )));

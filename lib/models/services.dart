@@ -18,10 +18,6 @@ class MyServices {
         description: "Service description here",
       ),
       MyServices(
-        serviceName: ServiceType.manicure,
-        description: "Service description here",
-      ),
-      MyServices(
         serviceName: ServiceType.photoshoot,
         description: "Service description here",
       ),

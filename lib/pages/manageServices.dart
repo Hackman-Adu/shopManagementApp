@@ -107,7 +107,7 @@ class ManageServiceState extends State<ManageServices> {
   void addingNewService() async {
     var controller = Provider.of<ServiceController>(context, listen: false);
     var value = await this.addNewService();
-    if (value != null) {
+    if (value.serviceName.trim() != '' && value.description.trim() != '') {
       Utils.showpinnerDialog(context: context, text: "Adding service...");
       Timer(Duration(milliseconds: 500), () {
         Navigator.of(context).pop();
@@ -136,22 +136,29 @@ class ManageServiceState extends State<ManageServices> {
                         EdgeInsets.symmetric(vertical: 20, horizontal: 1.5),
                     children: [
                         this.header(),
+                        SizedBox(height: 13),
+                        Divider(),
                         ...controller.services.map((service) {
-                          return ListTile(
-                              subtitle: Text(
-                                service.description,
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    color:
-                                        Utils.kPrimaryColor.withOpacity(0.75)),
-                              ),
-                              title: Text(
-                                service.serviceName,
-                                style: TextStyle(
-                                    fontSize: 17.5,
-                                    fontWeight: FontWeight.bold,
-                                    color: Utils.kPrimaryColor),
-                              ));
+                          return Column(
+                            children: [
+                              ListTile(
+                                  subtitle: Text(
+                                    service.description,
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        color: Utils.kPrimaryColor
+                                            .withOpacity(0.75)),
+                                  ),
+                                  title: Text(service.serviceName,
+                                      style: TextStyle(
+                                          fontSize: 17.5,
+                                          color:
+                                              Colors.black.withOpacity(0.65)))),
+                              Padding(
+                                  padding: EdgeInsets.only(left: 7),
+                                  child: Divider()),
+                            ],
+                          );
                         }).toList()
                       ])
                 : Center(

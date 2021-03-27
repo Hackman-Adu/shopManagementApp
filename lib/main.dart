@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
                   foregroundColor:
                       MaterialStateProperty.all(Utils.kPrimaryColor))),
           appBarTheme: AppBarTheme(brightness: Brightness.dark),
-          primaryColor: Utils.kPrimaryColor,
+          primaryColor: Utils.kDarkPrimaryColor,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         home: SplashScreen());

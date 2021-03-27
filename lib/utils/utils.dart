@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'dart:io';
 
+import 'package:intl/intl.dart';
+
 class Utils {
   //constant values
-  static const Color kPrimaryColor = Color(0XFFF7f0a49);
-  static const Color kDarkPrimaryColor = Color(0XFFF4c062c);
+  static const Color kPrimaryColor = Color(0XFFFFC766A);
+  static const Color kDarkPrimaryColor = Color(0XFFFca5348);
   static const String shopName = "Divas Beauty Shop";
   static const String family = "ShipporiMincho-Regular";
 
@@ -14,6 +16,21 @@ class Utils {
     return TextStyle(
       color: Colors.black.withOpacity(0.80),
       fontSize: 15,
+    );
+  }
+
+  static Widget checkBox() {
+    return Container(
+      height: 25,
+      width: 25,
+      child: Center(
+          child: Icon(
+        Icons.done,
+        size: 15,
+        color: Colors.white,
+      )),
+      decoration:
+          BoxDecoration(color: Utils.kPrimaryColor, shape: BoxShape.circle),
     );
   }
 
@@ -40,6 +57,27 @@ class Utils {
 
   static String ghanaCedi() {
     return "GH" + String.fromCharCode(0x20B5);
+  }
+
+  static String getDateTime(String date) {
+    var format = new DateFormat('MMMM dd, yyyy hh:mm:ss a');
+    return format.format(DateTime.parse(date));
+  }
+
+  static Widget bottomText({Color color = Colors.white}) {
+    return Container(
+      margin: EdgeInsets.only(bottom: 10, top: 30),
+      child: Center(
+          child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+        child: Text(
+          "Divas Beauty Shop Management\nSystem. (Office Use Only)",
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 10, color: color),
+        ),
+      )),
+      width: double.infinity,
+    );
   }
 
 //platform specific action alert(Yes or No Alert)

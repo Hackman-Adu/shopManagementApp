@@ -5,8 +5,12 @@ class Customers {
   String address;
   String image;
   String customerID;
+  String telephone2;
+  String gender;
   Customers(
       {this.fullName,
+      this.telephone2 = '',
+      this.gender,
       this.emailAddress,
       this.telephone,
       this.address,
@@ -18,20 +22,26 @@ class Customers {
       Customers(
         customerID: "CUS001",
         fullName: "Belinda Appiah",
+        gender: "Female",
+        telephone2: "+233 248523003",
         emailAddress: "belindaappiah@gmail.com",
-        telephone: "+233 248520036",
+        telephone: "248520036",
         address: "ASB Junction, 2nd Street Malam",
         image: "",
       ),
       Customers(
+        gender: "Female",
+        telephone2: "248523003",
         customerID: "CUS002",
         fullName: "Jessica Lovial",
         emailAddress: "jessicalovia@gmail.com",
-        telephone: "+233 248456789",
+        telephone: "248456789",
         address: "ASB Junction, 3rd Street Malam",
         image: "assets/images/girl2.jpg",
       ),
       Customers(
+        gender: "Female",
+        telephone2: "248523003",
         customerID: "CUS003",
         fullName: "Gifty Akosua Gyebi",
         emailAddress: "giftygyebi@yahoo.com",
@@ -40,6 +50,8 @@ class Customers {
         image: "assets/images/girl5.jpg",
       ),
       Customers(
+        gender: "Female",
+        telephone2: "248523003",
         customerID: "CUS004",
         fullName: "Lind Obeng Agyemang",
         emailAddress: "lindaagyemang@gmail.com",
@@ -48,10 +60,12 @@ class Customers {
         image: "",
       ),
       Customers(
+        gender: "Female",
+        telephone2: "248523003",
         customerID: "CUS005",
         fullName: "Vivian",
         emailAddress: "vivianoteng@yahoo.com",
-        telephone: "+233 247890989",
+        telephone: "247890989",
         address: "AZ Junction Street,PB 123",
         image: "",
       )

@@ -1,5 +1,4 @@
 import 'package:beautyShop/controllers/customersController.dart';
-import 'package:beautyShop/pages/customerImages.dart';
 import 'package:beautyShop/utils/utils.dart';
 import 'package:beautyShop/widgets/borderTextField.dart';
 import 'package:flutter/material.dart';
@@ -21,11 +20,36 @@ class AddNewCustomerState extends State<AddNewCustomer> {
   var formKey = GlobalKey<FormState>();
   Customers customer = new Customers();
   String customerImage = "";
+  TextEditingController gender = new TextEditingController(text: '');
+  List<String> genderList = ['Male', 'Female'];
 
   Widget spacer({double height = 27}) {
     return SizedBox(
       height: height,
     );
+  }
+
+  void chooseGender() {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return Container(
+            child: Wrap(
+              children: [
+                ...this.genderList.map((g) {
+                  return ListTile(
+                      onTap: () {
+                        Navigator.of(context).pop();
+                        this.gender.text = g;
+                      },
+                      trailing:
+                          g == this.gender.text ? Utils.checkBox() : Text(''),
+                      title: Text(g));
+                }).toList()
+              ],
+            ),
+          );
+        });
   }
 
 //generating inputfields for the add new customer form
@@ -36,6 +60,7 @@ class AddNewCustomerState extends State<AddNewCustomer> {
           return AllBorderField(
             hint: "Customer ID",
             label: "Customer ID",
+            isEnabled: false,
             isReadOnly: true,
             controller: new TextEditingController(
                 text: controller.customers.length + 1 > 9
@@ -64,6 +89,26 @@ class AddNewCustomerState extends State<AddNewCustomer> {
       ),
       this.spacer(),
       AllBorderField(
+        label: "Gender",
+        isReadOnly: true,
+        suffixIcon: Icon(Icons.arrow_drop_down),
+        onTap: () {
+          this.chooseGender();
+        },
+        controller: this.gender,
+        validator: (value) {
+          if (value.trim() == '') {
+            return "Gender is required";
+          } else {
+            return null;
+          }
+        },
+        onSaved: (value) {
+          this.customer.gender = value;
+        },
+      ),
+      this.spacer(),
+      AllBorderField(
         hint: "Enter customer email address",
         label: "Customer Email Address",
         type: TextInputType.emailAddress,
@@ -80,11 +125,12 @@ class AddNewCustomerState extends State<AddNewCustomer> {
       ),
       this.spacer(),
       AllBorderField(
-        hint: "Telephone (+233)",
+        hint: "Telephone 1 (+233)",
         type: TextInputType.phone,
-        label: "Telephone (+233)",
+        label: "Telephone 1 (+233)",
+        maxLength: 9,
         onSaved: (value) {
-          this.customer.telephone = value;
+          this.customer.telephone = "+233 " + value;
         },
         validator: (value) {
           if (value.trim() == '') {
@@ -94,6 +140,16 @@ class AddNewCustomerState extends State<AddNewCustomer> {
           } else {
             return null;
           }
+        },
+      ),
+      this.spacer(),
+      AllBorderField(
+        hint: "Telephone 2 (+233)",
+        type: TextInputType.phone,
+        label: "Telephone 2 (+233) optional",
+        maxLength: 9,
+        onSaved: (value) {
+          this.customer.telephone2 = value;
         },
       ),
       this.spacer(),
@@ -113,59 +169,11 @@ class AddNewCustomerState extends State<AddNewCustomer> {
         },
       ),
       this.spacer(),
-      CustomButton(
-        hasIcon: true,
-        onClicked: this.customerImage == ''
-            ? () async {
-                var image = await Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => ChooseImage()));
-                setState(() {
-                  this.customerImage = image ?? '';
-                });
-              }
-            : () {
-                setState(() {
-                  this.customerImage = '';
-                });
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text("Image removed"),
-                  elevation: 20,
-                  backgroundColor: Utils.kPrimaryColor,
-                  duration: Duration(milliseconds: 500),
-                ));
-              },
-        child: Center(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(this.customerImage == '' ? "Add Image" : 'Image added'),
-              SizedBox(width: 7),
-              Icon(Icons.add_a_photo)
-            ],
-          ),
-        ),
-      ),
-      this.spacer(),
       Consumer<CustomersControllers>(builder: (context, controller, child) {
         return CustomButton(
           text: "Save",
           onClicked: () {
-            if (this.formKey.currentState.validate()) {
-              this.formKey.currentState.save();
-              this.customer.image = this.customerImage;
-              Utils.showpinnerDialog(
-                  context: context, text: "Adding new customer...");
-              Timer(Duration(milliseconds: 500), () {
-                controller.addNewCustomers(this.customer);
-                print(this.customer.fullName);
-                Navigator.of(context).pop();
-                Utils.simpleAlert(
-                    title: "New Customer Added",
-                    context: context,
-                    content: "Customer successfully added");
-                this.formKey.currentState.reset();
-              });
-            }
+            this.saveCustomerInformation(controller);
           },
         );
       }),
@@ -173,17 +181,35 @@ class AddNewCustomerState extends State<AddNewCustomer> {
     ];
   }
 
+//saving information
+  void saveCustomerInformation(controller) {
+    if (this.formKey.currentState.validate()) {
+      this.formKey.currentState.save();
+      this.customer.image = this.customerImage;
+      Utils.showpinnerDialog(context: context, text: "Adding new customer...");
+      Timer(Duration(milliseconds: 500), () {
+        controller.addNewCustomers(this.customer);
+        print(this.customer.fullName);
+        Navigator.of(context).pop();
+        Utils.simpleAlert(
+            title: "New Customer Added",
+            context: context,
+            content: "Customer successfully added");
+        this.formKey.currentState.reset();
+      });
+    }
+  }
+
 //header
   Widget header() {
     return Row(
       children: [
         SizedBox(width: 8.5),
-        Icon(Icons.person_add_rounded,
-            size: 45, color: Utils.kPrimaryColor.withOpacity(0.75)),
+        Icon(Icons.person_add_rounded, size: 45, color: Utils.kPrimaryColor),
+        SizedBox(width: 3),
         Text(
           "Add New Customer",
-          style: TextStyle(
-              fontSize: 17, color: Utils.kPrimaryColor.withOpacity(0.75)),
+          style: TextStyle(fontSize: 15, color: Utils.kPrimaryColor),
         ),
       ],
     );

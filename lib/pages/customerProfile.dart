@@ -1,4 +1,5 @@
 import 'package:beautyShop/controllers/customersController.dart';
+import 'package:beautyShop/pages/addPayment.dart';
 import 'package:flutter/material.dart';
 import 'package:beautyShop/models/customers.dart';
 import 'package:beautyShop/utils/utils.dart';
@@ -31,9 +32,12 @@ class CustomerProfileState extends State<CustomerProfile> {
               )
             : CircleAvatar(
                 backgroundColor: Utils.kPrimaryColor,
-                radius: 40,
+                radius: 35,
                 child: Center(
-                  child: Text(Utils.getInitials(customer.fullName)),
+                  child: Text(
+                    Utils.getInitials(customer.fullName),
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
               ),
       ],
@@ -94,11 +98,11 @@ class CustomerProfileState extends State<CustomerProfile> {
       children: [
         Icon(
           icon,
-          size: 23,
+          size: 20,
           color: Utils.kPrimaryColor,
         ),
         SizedBox(
-          width: 10,
+          width: 13,
         ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -115,7 +119,10 @@ class CustomerProfileState extends State<CustomerProfile> {
             ),
             Text(
               value.toUpperCase(),
-              style: TextStyle(fontSize: 16, color: Utils.kDarkPrimaryColor),
+              style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey),
             ),
           ],
         )
@@ -124,7 +131,7 @@ class CustomerProfileState extends State<CustomerProfile> {
   }
 
   TextStyle optionTextStyle() {
-    return TextStyle(fontSize: 17, color: Utils.kDarkPrimaryColor);
+    return TextStyle(fontSize: 15, color: Utils.kDarkPrimaryColor);
   }
 
   Widget customerProfileHeader() {
@@ -153,7 +160,10 @@ class CustomerProfileState extends State<CustomerProfile> {
         onTap: () {
           Navigator.of(context).pop();
         },
-        leading: Icon(Icons.phone),
+        leading: Icon(
+          Icons.phone,
+          size: 20,
+        ),
         title: Text(
           "Call",
           style: optionTextStyle(),
@@ -163,7 +173,10 @@ class CustomerProfileState extends State<CustomerProfile> {
         onTap: () {
           Navigator.of(context).pop();
         },
-        leading: Icon(Icons.email),
+        leading: Icon(
+          Icons.email,
+          size: 20,
+        ),
         title: Text(
           "Send Email",
           style: optionTextStyle(),
@@ -173,7 +186,10 @@ class CustomerProfileState extends State<CustomerProfile> {
         onTap: () {
           Navigator.of(context).pop();
         },
-        leading: Icon(Icons.message_rounded),
+        leading: Icon(
+          Icons.message_rounded,
+          size: 20,
+        ),
         title: Text(
           "Send SMS",
           style: optionTextStyle(),
@@ -183,8 +199,15 @@ class CustomerProfileState extends State<CustomerProfile> {
       ListTile(
         onTap: () {
           Navigator.of(context).pop();
+          Utils.navigation(
+              context: context,
+              destination:
+                  AddNewPayment(route: 'profile', customer: this.customer));
         },
-        leading: Icon(Icons.payment_rounded),
+        leading: Icon(
+          Icons.payment_rounded,
+          size: 20,
+        ),
         title: Text(
           "Add Payment",
           style: optionTextStyle(),
@@ -194,7 +217,7 @@ class CustomerProfileState extends State<CustomerProfile> {
         onTap: () {
           Navigator.of(context).pop();
         },
-        leading: Icon(Icons.edit),
+        leading: Icon(Icons.edit, size: 20),
         title: Text(
           "Edit Profile",
           style: optionTextStyle(),
@@ -205,7 +228,10 @@ class CustomerProfileState extends State<CustomerProfile> {
           Navigator.of(context).pop();
           this.removingCustomer(customer);
         },
-        leading: Icon(Icons.delete),
+        leading: Icon(
+          Icons.delete,
+          size: 20,
+        ),
         title: Text(
           "Delete Customer",
           style: optionTextStyle(),
@@ -216,7 +242,8 @@ class CustomerProfileState extends State<CustomerProfile> {
 
   void removingCustomer(Customers customer) async {
     var value = await Utils.actionAlert(
-        content: "Do you want to delete this customer?",
+        content:
+            "Deleting this customer will remove customer from all other records.\nDo you want to delete customer?",
         title: "Delete Customer",
         context: context);
     if (value) {
@@ -238,12 +265,27 @@ class CustomerProfileState extends State<CustomerProfile> {
           "Customer ID", customer.customerID, Icons.perm_identity_rounded),
       itemSpacer(),
       Divider(),
+      buildItemRow("Gender", customer.gender, Icons.person),
+      itemSpacer(),
+      Divider(),
+      itemSpacer(),
+      buildItemRow("Email Address", customer.emailAddress, Icons.email),
+      Divider(),
       itemSpacer(),
       buildItemRow("Residential Address", customer.address, Icons.location_on),
       itemSpacer(),
       Divider(),
       itemSpacer(),
-      buildItemRow("Telephone", customer.telephone, Icons.phone),
+      buildItemRow("Telephone 1", customer.telephone, Icons.phone),
+      itemSpacer(),
+      Divider(),
+      itemSpacer(),
+      buildItemRow(
+          "Telephone 2",
+          customer.telephone2.trim() != ''
+              ? "+233 " + customer.telephone2
+              : 'Not provided',
+          Icons.phone),
       itemSpacer(),
       Divider(),
       itemSpacer(),
