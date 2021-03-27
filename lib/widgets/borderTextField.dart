@@ -13,9 +13,11 @@ class AllBorderField extends StatelessWidget {
   final Function onSaved;
   final TextInputType type;
   final Function validator;
+  final bool isEnabled;
   AllBorderField(
       {this.hint,
       this.label,
+      this.isEnabled = true,
       this.action = TextInputAction.next,
       this.isReadOnly = false,
       this.suffixIcon,
@@ -33,6 +35,7 @@ class AllBorderField extends StatelessWidget {
       validator: validator,
       keyboardType: type,
       onSaved: onSaved,
+      enabled: isEnabled,
       maxLength: maxLength,
       textInputAction: action,
       style: TextStyle(fontSize: 17),

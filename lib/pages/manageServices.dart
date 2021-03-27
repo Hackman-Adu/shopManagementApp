@@ -1,10 +1,11 @@
+import 'package:beautyShop/controllers/serviceController.dart';
 import 'package:flutter/material.dart';
 import 'package:beautyShop/models/services.dart';
 import 'dart:async';
 import 'package:beautyShop/utils/utils.dart';
 import "package:beautyShop/widgets/textField.dart";
 import 'package:beautyShop/widgets/customButton.dart';
-import 'dart:io';
+import 'package:provider/provider.dart';
 
 class ManageServices extends StatefulWidget {
   @override
@@ -14,23 +15,8 @@ class ManageServices extends StatefulWidget {
 }
 
 class ManageServiceState extends State<ManageServices> {
-  List<MyServices> services = MyServices().getServices();
-  MyServices addedService;
+  MyServices service = new MyServices();
   var formKey = GlobalKey<FormState>();
-  bool isLoading = true;
-  var key = GlobalKey<ScaffoldMessengerState>();
-
-  @override
-  void initState() {
-    this.addedService = new MyServices();
-    super.initState();
-    Timer(Duration(milliseconds: 500), () {
-      setState(() {
-        isLoading = false;
-      });
-    });
-  }
-
 //header widget
   Widget header() {
     return Row(
@@ -45,9 +31,13 @@ class ManageServiceState extends State<ManageServices> {
         SizedBox(
           width: 7,
         ),
-        Text(
-          "(${this.services.length})",
-          style: TextStyle(fontSize: 17, color: Colors.grey),
+        Consumer<ServiceController>(
+          builder: (context, controller, child) {
+            return Text(
+              "(${controller.services.length})",
+              style: TextStyle(fontSize: 17, color: Colors.grey),
+            );
+          },
         )
       ],
     );
@@ -57,6 +47,7 @@ class ManageServiceState extends State<ManageServices> {
   Future<MyServices> addNewService() async {
     return showDialog(
         context: context,
+        barrierDismissible: false,
         builder: (context) {
           return AlertDialog(
               scrollable: true,
@@ -68,7 +59,7 @@ class ManageServiceState extends State<ManageServices> {
                   Spacer(),
                   IconButton(
                     onPressed: () {
-                      Navigator.of(context).pop();
+                      Navigator.of(context).pop(null);
                     },
                     splashRadius: 20,
                     icon: Icon(Icons.cancel),
@@ -82,7 +73,7 @@ class ManageServiceState extends State<ManageServices> {
                   children: [
                     CustomFormField(
                       onSaved: (value) {
-                        this.addedService.serviceName = value;
+                        this.service.serviceName = value;
                       },
                       placeholder: "Enter service name",
                       type: TextInputType.multiline,
@@ -92,7 +83,7 @@ class ManageServiceState extends State<ManageServices> {
                     ),
                     CustomFormField(
                       onSaved: (value) {
-                        this.addedService.description = value;
+                        this.service.description = value;
                       },
                       placeholder: "Service description",
                       type: TextInputType.multiline,
@@ -104,9 +95,7 @@ class ManageServiceState extends State<ManageServices> {
                       text: "Save",
                       onClicked: () {
                         this.formKey.currentState.save();
-                        this.addedService.serviceIcon =
-                            "assets/images/makeup.png";
-                        Navigator.of(context).pop(this.addedService);
+                        Navigator.of(context).pop(this.service);
                       },
                     )
                   ],
@@ -115,73 +104,76 @@ class ManageServiceState extends State<ManageServices> {
         });
   }
 
+  void addingNewService() async {
+    var controller = Provider.of<ServiceController>(context, listen: false);
+    var value = await this.addNewService();
+    if (value != null) {
+      Utils.showpinnerDialog(context: context, text: "Adding service...");
+      Timer(Duration(milliseconds: 500), () {
+        Navigator.of(context).pop();
+        controller.addNewService(value);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    var controller = Provider.of<ServiceController>(context);
     return Scaffold(
-      key: this.key,
-      appBar: AppBar(
-        title: Text("Manage Services"),
-      ),
-      floatingActionButton: Utils.customFloatingButton(
-          context: context,
-          text: "Add New Service",
-          function: () async {
-            MyServices newService = await this.addNewService();
-            if (newService.serviceName.trim() != '' ||
-                newService.description.trim() != '') {
-              Platform.isAndroid
-                  ? Utils.androidLoadingSpinner(context, text: 'Please wait...')
-                  : Utils.iOSLoadingSpinner(context, text: "Please wait...");
-              Timer(Duration(milliseconds: 1000), () {
-                Navigator.of(context).pop();
-                setState(() {
-                  this.services.insert(0, newService);
-                });
-                Utils.showSnackBar(key, "Service successfully added");
-              });
-            }
-          }),
-      body: isLoading == false
-          ? ListView(
-              children: [
-                SizedBox(
-                  height: 17,
-                ),
-                header(),
-                SizedBox(
-                  height: 13,
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
-                  child: Divider(),
-                ),
-                SizedBox(height: 10),
-                ...this.services.map((service) {
-                  return Column(
+        appBar: AppBar(
+          title: Text("Manage Services"),
+        ),
+        floatingActionButton: Utils.customFloatingButton(
+            context: context,
+            text: "Add New Service",
+            function: () {
+              this.addingNewService();
+            }),
+        body: controller.isLoading == false
+            ? controller.services.length > 0
+                ? ListView(
+                    padding:
+                        EdgeInsets.symmetric(vertical: 20, horizontal: 1.5),
                     children: [
-                      ListTile(
-                        onTap: () {},
-                        title: Text(
-                          service.serviceName,
+                        this.header(),
+                        ...controller.services.map((service) {
+                          return ListTile(
+                              subtitle: Text(
+                                service.description,
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    color:
+                                        Utils.kPrimaryColor.withOpacity(0.75)),
+                              ),
+                              title: Text(
+                                service.serviceName,
+                                style: TextStyle(
+                                    fontSize: 17.5,
+                                    fontWeight: FontWeight.bold,
+                                    color: Utils.kPrimaryColor),
+                              ));
+                        }).toList()
+                      ])
+                : Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "No Services Added",
                           style: TextStyle(
-                              fontSize: 17,
-                              color: Colors.black.withOpacity(0.85)),
+                              fontSize: 21,
+                              color: Utils.kPrimaryColor,
+                              fontWeight: FontWeight.bold),
                         ),
-                        leading: Image.asset(service.serviceIcon,
-                            height: 40, width: 40),
-                        subtitle: Text(service.description ?? ''),
-                        trailing: Icon(Icons.chevron_right),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 16),
-                        child: Divider(),
-                      )
-                    ],
-                  );
-                }).toList()
-              ],
-            )
-          : Center(child: Utils.spinner()),
-    );
+                        Text("Start adding your services",
+                            style: TextStyle(
+                                fontSize: 14,
+                                color: Utils.kPrimaryColor.withOpacity(0.65)))
+                      ],
+                    ),
+                  )
+            : Center(
+                child: Utils.spinner(),
+              ));
   }
 }

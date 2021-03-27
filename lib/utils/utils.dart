@@ -23,6 +23,10 @@ class Utils {
         : iOSLoadingSpinner(context, text: text);
   }
 
+  static Widget moreIcon() {
+    return Platform.isAndroid ? Icon(Icons.more_vert) : Icon(Icons.more_horiz);
+  }
+
 //platform specific loading spinner
   static Widget spinner() {
     return Platform.isAndroid
@@ -34,12 +38,16 @@ class Utils {
           );
   }
 
+  static String ghanaCedi() {
+    return "GH" + String.fromCharCode(0x20B5);
+  }
+
 //platform specific action alert(Yes or No Alert)
-  static Future<bool> actionAlert(
-      {BuildContext context,
-      String title,
-      String content,
-      bool hasTwoActions = false}) {
+  static Future<bool> actionAlert({
+    BuildContext context,
+    String title,
+    String content,
+  }) {
     return Platform.isAndroid
         ? showDialog(
             context: context,
@@ -92,7 +100,6 @@ class Utils {
     BuildContext context,
     String title,
     String content,
-    Function okayPressed,
   }) {
     Platform.isAndroid
         ? showDialog(
@@ -103,7 +110,11 @@ class Utils {
                 content: Text(content),
                 actions: [
                   TextButton(
-                    onPressed: okayPressed,
+                    style: TextButton.styleFrom(
+                        textStyle: TextStyle(color: kPrimaryColor)),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
                     child: Text("Okay"),
                   )
                 ],
@@ -117,7 +128,9 @@ class Utils {
                 content: Text(content),
                 actions: [
                   CupertinoDialogAction(
-                    onPressed: okayPressed,
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
                     child: Text("Okay"),
                   )
                 ],
@@ -205,9 +218,22 @@ class Utils {
   }
 
 //static method to handle page navigation across the app
-  static void navigation(
+  static navigation(
       {@required BuildContext context, @required Widget destination}) {
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => destination));
+  }
+
+  static String getInitials(String name) {
+    var array = name.split(' ');
+    var first = '';
+    var last = '';
+    if (array.length > 1) {
+      first = array[0];
+      last = array[array.length - 1];
+      return first[0].toUpperCase() + last[0].toUpperCase();
+    } else {
+      return name[0].toUpperCase();
+    }
   }
 }

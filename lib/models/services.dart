@@ -1,43 +1,42 @@
 class MyServices {
   String serviceName;
-  String serviceIcon;
   String description;
-  MyServices({this.serviceName, this.description, this.serviceIcon});
+  MyServices({this.serviceName, this.description});
 
   List<MyServices> getServices() {
     return [
       MyServices(
-          serviceName: ServiceType.makeup,
-          description: "Service description here",
-          serviceIcon: 'assets/images/makeup.png'),
+        serviceName: ServiceType.makeup,
+        description: "Service description here",
+      ),
       MyServices(
-          serviceName: ServiceType.braiding,
-          description: "Service description here",
-          serviceIcon: 'assets/images/braiding.png'),
+        serviceName: ServiceType.braiding,
+        description: "Service description here",
+      ),
       MyServices(
-          serviceName: "Nails",
-          description: "Service description here",
-          serviceIcon: 'assets/images/nails.png'),
+        serviceName: "Nails",
+        description: "Service description here",
+      ),
       MyServices(
-          serviceName: ServiceType.manicure,
-          description: "Service description here",
-          serviceIcon: 'assets/images/manicure.png'),
+        serviceName: ServiceType.manicure,
+        description: "Service description here",
+      ),
       MyServices(
-          serviceName: ServiceType.photoshoot,
-          description: "Service description here",
-          serviceIcon: 'assets/images/camera.png'),
+        serviceName: ServiceType.photoshoot,
+        description: "Service description here",
+      ),
       MyServices(
-          serviceName: ServiceType.wigCup,
-          description: "Service description here",
-          serviceIcon: 'assets/images/wigCup.png'),
+        serviceName: ServiceType.wigCup,
+        description: "Service description here",
+      ),
       MyServices(
-          serviceName: ServiceType.manicure,
-          description: "Service description here",
-          serviceIcon: 'assets/images/manicure.png'),
+        serviceName: ServiceType.manicure,
+        description: "Service description here",
+      ),
       MyServices(
-          serviceName: ServiceType.fixWig,
-          description: "Service description here",
-          serviceIcon: 'assets/images/wig.png'),
+        serviceName: ServiceType.fixWig,
+        description: "Service description here",
+      ),
     ];
   }
 }

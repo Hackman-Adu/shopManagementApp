@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:beautyShop/utils/utils.dart';
 import 'package:beautyShop/widgets/textField.dart';
 import 'package:beautyShop/widgets/customButton.dart';
-import 'dart:io';
 import 'dart:async';
 import 'package:beautyShop/pages/home.dart';
 
@@ -30,20 +29,117 @@ class LoginState extends State<Login> with SingleTickerProviderStateMixin {
       Utils.simpleAlert(
           context: context,
           title: "Empty",
-          okayPressed: () {
-            Navigator.of(context).pop();
-          },
           content: "Password and username are required");
       return;
     }
-    Platform.isAndroid
-        ? Utils.androidLoadingSpinner(context, text: "Authenticating")
-        : Utils.iOSLoadingSpinner(context, text: "Authenticating...");
+    Utils.showpinnerDialog(context: context, text: "Authenticating...");
     Timer(Duration(milliseconds: 1000), () {
       Navigator.of(context).pop();
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => Home()));
     });
+  }
+
+  Widget form() {
+    return Form(
+      key: this.formKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          CustomFormField(
+            onSaved: (value) {
+              this.username = value;
+            },
+            leadingIcon: Icon(
+              Icons.person,
+              color: Utils.kPrimaryColor,
+            ),
+            action: TextInputAction.next,
+            placeholder: "Enter your username",
+            hasTrailingIcon: false,
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          CustomFormField(
+            onSaved: (value) {
+              this.password = value;
+            },
+            leadingIcon: Icon(
+              Icons.lock,
+              color: Utils.kPrimaryColor,
+            ),
+            isPassword: this.togglePasswordVisibility,
+            action: TextInputAction.done,
+            placeholder: "Enter your password",
+            hasTrailingIcon: true,
+            trailingIcon: IconButton(
+              onPressed: () {
+                setState(() {
+                  this.togglePasswordVisibility =
+                      !this.togglePasswordVisibility;
+                });
+              },
+              splashRadius: 20,
+              icon: Icon(
+                togglePasswordVisibility
+                    ? Icons.visibility_off
+                    : Icons.visibility,
+                color: Utils.kPrimaryColor,
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          CustomButton(
+            onClicked: () {
+              this.login();
+            },
+            text: "Login",
+          ),
+          SizedBox(
+            height: 15,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget bottomText() {
+    return Container(
+      margin: EdgeInsets.only(bottom: 10, top: 30),
+      child: Center(
+          child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+        child: Text(
+          "Divas Beauty Shop Management\nSystem. (Office Use Only)",
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 10, color: Colors.white.withOpacity(0.65)),
+        ),
+      )),
+      width: double.infinity,
+    );
+  }
+
+  Widget forgotPassword() {
+    return Container(
+      margin: EdgeInsets.only(bottom: 25),
+      child: Center(
+        child: InkWell(
+            borderRadius: BorderRadius.circular(10),
+            onTap: () {},
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+              child: Text(
+                "Forgot Password",
+                style: TextStyle(fontSize: 13, color: Colors.white),
+              ),
+            )),
+      ),
+      width: double.infinity,
+    );
   }
 
   @override
@@ -104,111 +200,15 @@ class LoginState extends State<Login> with SingleTickerProviderStateMixin {
                                 borderRadius: BorderRadius.circular(10)),
                             shadowColor: Colors.black.withOpacity(0.25),
                             child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 10, horizontal: 10),
-                              child: Form(
-                                key: this.formKey,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    CustomFormField(
-                                      onSaved: (value) {
-                                        this.username = value;
-                                      },
-                                      leadingIcon: Icon(
-                                        Icons.person,
-                                        color: Utils.kPrimaryColor,
-                                      ),
-                                      action: TextInputAction.next,
-                                      placeholder: "Enter your username",
-                                      hasTrailingIcon: false,
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    CustomFormField(
-                                      onSaved: (value) {
-                                        this.password = value;
-                                      },
-                                      leadingIcon: Icon(
-                                        Icons.lock,
-                                        color: Utils.kPrimaryColor,
-                                      ),
-                                      isPassword: this.togglePasswordVisibility,
-                                      action: TextInputAction.done,
-                                      placeholder: "Enter your password",
-                                      hasTrailingIcon: true,
-                                      trailingIcon: IconButton(
-                                        onPressed: () {
-                                          setState(() {
-                                            this.togglePasswordVisibility =
-                                                !this.togglePasswordVisibility;
-                                          });
-                                        },
-                                        splashRadius: 20,
-                                        icon: Icon(
-                                          togglePasswordVisibility
-                                              ? Icons.visibility_off
-                                              : Icons.visibility,
-                                          color: Utils.kPrimaryColor,
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 20,
-                                    ),
-                                    CustomButton(
-                                      onClicked: () {
-                                        this.login();
-                                      },
-                                      text: "Login",
-                                    ),
-                                    SizedBox(
-                                      height: 15,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 10, horizontal: 10),
+                                child: this.form()),
                           )),
                       SizedBox(
                         height: 10,
                       ),
-                      Container(
-                        margin: EdgeInsets.only(bottom: 25),
-                        child: Center(
-                          child: InkWell(
-                              borderRadius: BorderRadius.circular(10),
-                              onTap: () {},
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 25, vertical: 10),
-                                child: Text(
-                                  "Forgot Password",
-                                  style: TextStyle(
-                                      fontSize: 13, color: Colors.white),
-                                ),
-                              )),
-                        ),
-                        width: double.infinity,
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(bottom: 10, top: 30),
-                        child: Center(
-                            child: Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 25, vertical: 10),
-                          child: Text(
-                            "Divas Beauty Shop Management\nSystem. (Office Use Only)",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 10,
-                                color: Colors.white.withOpacity(0.65)),
-                          ),
-                        )),
-                        width: double.infinity,
-                      ),
+                      this.forgotPassword(),
+                      this.bottomText()
                     ],
                   )),
             )));

@@ -19,6 +19,11 @@ class CustomersControllers extends ChangeNotifier {
     notifyListeners();
   }
 
+  void deleteCustomer(Customers customer) {
+    this.customers.remove(customer);
+    notifyListeners();
+  }
+
   void getCustomers() {
     Timer(Duration(milliseconds: 1000), () {
       this.customers = Customers().getCustomers();

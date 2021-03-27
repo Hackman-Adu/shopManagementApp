@@ -1,7 +1,10 @@
+import 'package:beautyShop/controllers/customersController.dart';
 import 'package:flutter/material.dart';
 import 'package:beautyShop/models/customers.dart';
 import 'package:beautyShop/utils/utils.dart';
 import 'dart:async';
+
+import 'package:provider/provider.dart';
 
 class CustomerProfile extends StatefulWidget {
   final Customers customer;
@@ -21,21 +24,18 @@ class CustomerProfileState extends State<CustomerProfile> {
       clipBehavior: Clip.none,
       alignment: Alignment.topRight,
       children: [
-        CircleAvatar(
-          radius: 40,
-          backgroundImage: AssetImage(this.customer.image),
-        ),
-        Positioned(
-            top: 17,
-            right: -10,
-            child: Container(
-              height: 20,
-              width: 20,
-              decoration: BoxDecoration(
-                  border: Border.all(color: Colors.white, width: 2),
-                  color: customer.isActive ? Colors.green : Colors.redAccent,
-                  shape: BoxShape.circle),
-            )),
+        this.customer.image != ''
+            ? CircleAvatar(
+                radius: 40,
+                backgroundImage: AssetImage(this.customer.image),
+              )
+            : CircleAvatar(
+                backgroundColor: Utils.kPrimaryColor,
+                radius: 40,
+                child: Center(
+                  child: Text(Utils.getInitials(customer.fullName)),
+                ),
+              ),
       ],
     );
   }
@@ -59,7 +59,7 @@ class CustomerProfileState extends State<CustomerProfile> {
                 Text(
                   customer.fullName.toUpperCase(),
                   style:
-                      TextStyle(fontSize: 17, color: Utils.kDarkPrimaryColor),
+                      TextStyle(fontSize: 15, color: Utils.kDarkPrimaryColor),
                 ),
                 Text(
                   customer.emailAddress,
@@ -184,23 +184,56 @@ class CustomerProfileState extends State<CustomerProfile> {
         onTap: () {
           Navigator.of(context).pop();
         },
+        leading: Icon(Icons.payment_rounded),
+        title: Text(
+          "Add Payment",
+          style: optionTextStyle(),
+        ),
+      ),
+      ListTile(
+        onTap: () {
+          Navigator.of(context).pop();
+        },
         leading: Icon(Icons.edit),
         title: Text(
           "Edit Profile",
+          style: optionTextStyle(),
+        ),
+      ),
+      ListTile(
+        onTap: () async {
+          Navigator.of(context).pop();
+          this.removingCustomer(customer);
+        },
+        leading: Icon(Icons.delete),
+        title: Text(
+          "Delete Customer",
           style: optionTextStyle(),
         ),
       )
     ];
   }
 
+  void removingCustomer(Customers customer) async {
+    var value = await Utils.actionAlert(
+        content: "Do you want to delete this customer?",
+        title: "Delete Customer",
+        context: context);
+    if (value) {
+      Utils.showpinnerDialog(context: context, text: "Deleting customer...");
+      Timer(Duration(milliseconds: 1000), () {
+        Navigator.of(context).pop();
+        setState(() {
+          Provider.of<CustomersControllers>(context, listen: false)
+              .deleteCustomer(customer);
+        });
+        Navigator.pop(context);
+      });
+    }
+  }
+
   List<Widget> buildItems() {
     return [
-      itemSpacer(),
-      buildItemRow("Customer Status", customer.isActive ? "Active" : "InActive",
-          Icons.perm_identity_rounded),
-      itemSpacer(),
-      Divider(),
-      itemSpacer(),
       buildItemRow(
           "Customer ID", customer.customerID, Icons.perm_identity_rounded),
       itemSpacer(),
@@ -214,8 +247,6 @@ class CustomerProfileState extends State<CustomerProfile> {
       itemSpacer(),
       Divider(),
       itemSpacer(),
-      buildItemRow(
-          "Last Serviced", customer.lastPurchase, Icons.calendar_today_rounded)
     ];
   }
 

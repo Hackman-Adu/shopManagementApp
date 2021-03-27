@@ -19,6 +19,10 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Divas Beauty Shop',
         theme: ThemeData(
+          textButtonTheme: TextButtonThemeData(
+              style: ButtonStyle(
+                  foregroundColor:
+                      MaterialStateProperty.all(Utils.kPrimaryColor))),
           appBarTheme: AppBarTheme(brightness: Brightness.dark),
           primaryColor: Utils.kPrimaryColor,
           visualDensity: VisualDensity.adaptivePlatformDensity,

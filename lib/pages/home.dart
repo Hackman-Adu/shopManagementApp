@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:beautyShop/controllers/customersController.dart';
 import 'package:beautyShop/pages/managePayment.dart';
 import 'package:beautyShop/pages/manageServices.dart';
@@ -124,24 +126,44 @@ class HomeState extends State<Home> {
       physics: BouncingScrollPhysics(),
       children: [
         ...customers.map((customer) {
-          return ListTile(
-            onTap: () {
-              Utils.navigation(
-                  context: context,
-                  destination: CustomerProfile(
-                    customer: customer,
-                  ));
-            },
-            title: Text(customer.fullName),
-            subtitle: Text(customer.address),
-            leading: Container(
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                        fit: BoxFit.cover, image: AssetImage(customer.image)),
-                    shape: BoxShape.circle),
-                width: 50,
-                height: 50),
-          );
+          return Container(
+              margin: EdgeInsets.symmetric(vertical: 5),
+              child: ListTile(
+                onTap: () {
+                  Utils.navigation(
+                      context: context,
+                      destination: CustomerProfile(
+                        customer: customer,
+                      ));
+                },
+                title: Text(
+                  customer.fullName.toUpperCase(),
+                  style: TextStyle(
+                    fontSize: 15,
+                  ),
+                ),
+                subtitle: Text(customer.address),
+                leading: customer.image.trim() != ''
+                    ? Container(
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: AssetImage(customer.image)),
+                            shape: BoxShape.circle),
+                        width: 50,
+                        height: 50)
+                    : Container(
+                        child: Center(
+                          child: Text(
+                            Utils.getInitials(customer.fullName),
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                        decoration: BoxDecoration(
+                            color: Utils.kPrimaryColor, shape: BoxShape.circle),
+                        width: 50,
+                        height: 50),
+              ));
         }).toList()
       ],
     );
@@ -195,28 +217,49 @@ class HomeState extends State<Home> {
               Utils.navigation(context: context, destination: AddNewCustomer());
             }),
         body: controller.isLoading == false
-            ? SingleChildScrollView(
-                padding: EdgeInsets.only(top: 15, bottom: 30),
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: 7,
+            ? controller.customers.length > 0
+                ? SingleChildScrollView(
+                    padding: EdgeInsets.only(top: 15, bottom: 30),
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 7,
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          child: this.header(),
+                        ),
+                        SizedBox(
+                          height: 7,
+                        ),
+                        Divider(),
+                        SizedBox(
+                          height: 4,
+                        ),
+                        this.customersList(controller.customers)
+                      ],
                     ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      child: this.header(),
+                  )
+                : Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "No Customers Available",
+                          style: TextStyle(
+                              fontSize: 21,
+                              fontWeight: FontWeight.bold,
+                              color: Utils.kPrimaryColor),
+                        ),
+                        Text(
+                          "Start adding new customers",
+                          style: TextStyle(
+                              fontSize: 14,
+                              color: Utils.kPrimaryColor.withOpacity(0.5)),
+                        )
+                      ],
                     ),
-                    SizedBox(
-                      height: 7,
-                    ),
-                    Divider(),
-                    SizedBox(
-                      height: 4,
-                    ),
-                    this.customersList(controller.customers)
-                  ],
-                ),
-              )
+                  )
             : Center(
                 child: Utils.spinner(),
               ));
