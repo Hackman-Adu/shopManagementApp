@@ -12,9 +12,22 @@ class DashBoard extends StatefulWidget {
   }
 }
 
-class DashBoardState extends State<DashBoard> {
+class DashBoardState extends State<DashBoard>
+    with SingleTickerProviderStateMixin {
   List<MenuItems> menus = MenuItems().menus();
   bool isGrid = true;
+  AnimationController animationController;
+  Animation animation;
+  CurvedAnimation curve;
+
+  initAnimation() {
+    this.animationController = new AnimationController(
+        vsync: this, duration: Duration(milliseconds: 250));
+    this.curve = new CurvedAnimation(
+        curve: Curves.bounceInOut, parent: this.animationController);
+    this.animation = Tween<double>(begin: 0.0, end: 1.0).animate(this.curve);
+    this.animationController.forward();
+  }
 
   void logout() async {
     var value = await Utils.actionAlert(
@@ -47,6 +60,8 @@ class DashBoardState extends State<DashBoard> {
                   color: Utils.kDarkPrimaryColor,
                 ),
                 onPressed: () {
+                  this.animationController.reset();
+                  this.animationController.forward();
                   setState(() {
                     this.isGrid = !this.isGrid;
                   });
@@ -66,40 +81,43 @@ class DashBoardState extends State<DashBoard> {
             SliverGridDelegateWithMaxCrossAxisExtent(maxCrossAxisExtent: 300),
         itemBuilder: (context, index) {
           var menu = this.menus[index];
-          return InkWell(
-              borderRadius: BorderRadius.circular(10),
-              onTap: () {
-                if (menu.name != "Logout") {
-                  Utils.navigation(
-                      context: context, destination: menu.destination);
-                } else {
-                  this.logout();
-                }
-              },
-              child: Card(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
-                  elevation: 25,
-                  shadowColor: Colors.black.withOpacity(0.25),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 3),
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(menu.icon,
-                              size: 45, color: Utils.kDarkPrimaryColor),
-                          SizedBox(height: 5),
-                          Text(
-                            menu.name,
-                            style: TextStyle(
-                                fontSize: 17,
-                                color: Colors.black.withOpacity(0.75)),
-                          )
-                        ],
-                      ),
-                    ),
-                  )));
+          return ScaleTransition(
+              scale: this.animation,
+              child: InkWell(
+                  borderRadius: BorderRadius.circular(10),
+                  onTap: () {
+                    if (menu.name != "Logout") {
+                      Utils.navigation(
+                          context: context, destination: menu.destination);
+                    } else {
+                      this.logout();
+                    }
+                  },
+                  child: Card(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                      elevation: 25,
+                      shadowColor: Colors.black.withOpacity(0.25),
+                      child: Padding(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 3),
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(menu.icon,
+                                  size: 45, color: Utils.kDarkPrimaryColor),
+                              SizedBox(height: 5),
+                              Text(
+                                menu.name,
+                                style: TextStyle(
+                                    fontSize: 17,
+                                    color: Colors.black.withOpacity(0.75)),
+                              )
+                            ],
+                          ),
+                        ),
+                      ))));
         });
   }
 
@@ -109,25 +127,39 @@ class DashBoardState extends State<DashBoard> {
       shrinkWrap: true,
       children: [
         ...this.menus.map((menu) {
-          return ListTile(
-              onTap: () {
-                if (menu.name != "Logout") {
-                  Utils.navigation(
-                      context: context, destination: menu.destination);
-                } else {
-                  this.logout();
-                }
-              },
-              trailing: Icon(
-                Icons.chevron_right_outlined,
-                color: Utils.kDarkPrimaryColor,
-              ),
-              leading:
-                  Icon(menu.icon, size: 30, color: Utils.kDarkPrimaryColor),
-              title: Text(menu.name, style: TextStyle(fontSize: 16)));
+          return ScaleTransition(
+              scale: this.animation,
+              child: ListTile(
+                  onTap: () {
+                    if (menu.name != "Logout") {
+                      Utils.navigation(
+                          context: context, destination: menu.destination);
+                    } else {
+                      this.logout();
+                    }
+                  },
+                  trailing: Icon(
+                    Icons.chevron_right_outlined,
+                    color: Utils.kDarkPrimaryColor,
+                  ),
+                  leading:
+                      Icon(menu.icon, size: 30, color: Utils.kDarkPrimaryColor),
+                  title: Text(menu.name, style: TextStyle(fontSize: 16))));
         }).toList()
       ],
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    this.initAnimation();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    this.animationController.dispose();
   }
 
   @override

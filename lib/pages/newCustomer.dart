@@ -1,4 +1,5 @@
 import 'package:beautyShop/controllers/customersController.dart';
+import 'package:beautyShop/pages/customerImages.dart';
 import 'package:beautyShop/utils/utils.dart';
 import 'package:beautyShop/widgets/borderTextField.dart';
 import 'package:flutter/material.dart';
@@ -50,6 +51,59 @@ class AddNewCustomerState extends State<AddNewCustomer> {
             ),
           );
         });
+  }
+
+  Widget choosePhoto() {
+    return Padding(
+        padding: EdgeInsets.only(left: 13),
+        child: Row(children: [
+          this.customerImage == ''
+              ? this.noImageSelectedAvatar()
+              : this.imageSelectedAvatar(),
+          SizedBox(width: 5),
+          TextButton(
+              onPressed: () async {
+                if (this.customerImage == '') {
+                  var image = await Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => ChooseImage()));
+                  setState(() {
+                    this.customerImage = image ?? this.customerImage;
+                  });
+                } else {
+                  setState(() {
+                    this.customerImage = '';
+                  });
+                }
+              },
+              child: Row(
+                children: [
+                  Icon(this.customerImage == '' ? Icons.add : Icons.remove),
+                  SizedBox(width: 7),
+                  Text(this.customerImage == '' ? "Add Photo" : "Remove Photo")
+                ],
+              ))
+        ]));
+  }
+
+  Widget noImageSelectedAvatar() {
+    return CircleAvatar(
+      backgroundColor: Utils.kDarkPrimaryColor,
+      radius: 35,
+      child: Center(
+        child: Icon(
+          Icons.account_circle_rounded,
+          size: 25,
+        ),
+      ),
+    );
+  }
+
+  Widget imageSelectedAvatar() {
+    return CircleAvatar(
+      backgroundColor: Utils.kDarkPrimaryColor,
+      backgroundImage: AssetImage(this.customerImage),
+      radius: 35,
+    );
   }
 
 //generating inputfields for the add new customer form
@@ -196,23 +250,11 @@ class AddNewCustomerState extends State<AddNewCustomer> {
             context: context,
             content: "Customer successfully added");
         this.formKey.currentState.reset();
+        setState(() {
+          this.customerImage = '';
+        });
       });
     }
-  }
-
-//header
-  Widget header() {
-    return Row(
-      children: [
-        SizedBox(width: 8.5),
-        Icon(Icons.person_add_rounded, size: 45, color: Utils.kPrimaryColor),
-        SizedBox(width: 3),
-        Text(
-          "Add New Customer",
-          style: TextStyle(fontSize: 15, color: Utils.kPrimaryColor),
-        ),
-      ],
-    );
   }
 
   @override
@@ -232,7 +274,7 @@ class AddNewCustomerState extends State<AddNewCustomer> {
         child: Scaffold(
             key: this.scaffoldkey,
             appBar: AppBar(
-              title: Text("New Customer"),
+              title: Text("Add New Customer"),
             ),
             body: SingleChildScrollView(
               padding: EdgeInsets.symmetric(vertical: 10, horizontal: 4),
@@ -241,13 +283,14 @@ class AddNewCustomerState extends State<AddNewCustomer> {
                   SizedBox(
                     height: 10,
                   ),
-                  this.header(),
+                  this.choosePhoto(),
                   SizedBox(
                     height: 25,
                   ),
                   Card(
                     child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 7),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 7, vertical: 10),
                       child: Form(
                         key: this.formKey,
                         child: Column(

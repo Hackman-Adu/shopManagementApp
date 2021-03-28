@@ -153,7 +153,7 @@ class ManageServiceState extends State<ManageServices> {
                                       style: TextStyle(
                                           fontSize: 17.5,
                                           color:
-                                              Colors.black.withOpacity(0.65)))),
+                                              Colors.black.withOpacity(0.95)))),
                               Padding(
                                   padding: EdgeInsets.only(left: 7),
                                   child: Divider()),

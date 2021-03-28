@@ -23,42 +23,49 @@ class HomeState extends State<Home> {
         ...customers.map((customer) {
           return Container(
               margin: EdgeInsets.symmetric(vertical: 5),
-              child: ListTile(
-                onTap: () {
-                  Utils.navigation(
-                      context: context,
-                      destination: CustomerProfile(
-                        customer: customer,
-                      ));
-                },
-                title: Text(
-                  customer.fullName.toUpperCase(),
-                  style: TextStyle(
-                    fontSize: 15,
+              child: Column(children: [
+                ListTile(
+                  onTap: () {
+                    Utils.navigation(
+                        context: context,
+                        destination: CustomerProfile(
+                          customer: customer,
+                        ));
+                  },
+                  title: Text(
+                    customer.fullName.toUpperCase(),
+                    style: TextStyle(
+                      fontSize: 15,
+                    ),
                   ),
-                ),
-                subtitle: Text(customer.address),
-                leading: customer.image.trim() != ''
-                    ? Container(
-                        decoration: BoxDecoration(
-                            image: DecorationImage(
-                                fit: BoxFit.cover,
-                                image: AssetImage(customer.image)),
-                            shape: BoxShape.circle),
-                        width: 50,
-                        height: 50)
-                    : Container(
-                        child: Center(
-                          child: Text(
-                            Utils.getInitials(customer.fullName),
-                            style: TextStyle(color: Colors.white),
+                  subtitle: Text(customer.address),
+                  leading: customer.image.trim() != ''
+                      ? Container(
+                          decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: AssetImage(customer.image)),
+                              shape: BoxShape.circle),
+                          width: 50,
+                          height: 50)
+                      : Container(
+                          child: Center(
+                            child: Text(
+                              Utils.getInitials(customer.fullName),
+                              style: TextStyle(color: Colors.white),
+                            ),
                           ),
-                        ),
-                        decoration: BoxDecoration(
-                            color: Utils.kPrimaryColor, shape: BoxShape.circle),
-                        width: 50,
-                        height: 50),
-              ));
+                          decoration: BoxDecoration(
+                              color: Utils.kPrimaryColor,
+                              shape: BoxShape.circle),
+                          width: 50,
+                          height: 50),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 10),
+                  child: Divider(),
+                )
+              ]));
         }).toList()
       ],
     );
@@ -72,8 +79,8 @@ class HomeState extends State<Home> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Text(
-            "My Customers",
-            style: TextStyle(fontSize: 17, color: Utils.kDarkPrimaryColor),
+            "Available Customers".toUpperCase(),
+            style: TextStyle(fontSize: 15, color: Utils.kDarkPrimaryColor),
           ),
           Spacer(),
           Consumer<CustomersControllers>(builder: (context, controller, child) {
@@ -108,7 +115,7 @@ class HomeState extends State<Home> {
         body: controller.isLoading == false
             ? controller.customers.length > 0
                 ? SingleChildScrollView(
-                    padding: EdgeInsets.only(top: 15, bottom: 30),
+                    padding: EdgeInsets.only(top: 15, bottom: 65),
                     child: Column(
                       children: [
                         SizedBox(

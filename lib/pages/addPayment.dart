@@ -15,22 +15,29 @@ import 'package:provider/provider.dart';
 class AddNewPayment extends StatefulWidget {
   final String route;
   final Customers customer;
-  AddNewPayment({@required this.route, this.customer});
+  final Payments selectedpayment;
+  AddNewPayment({@required this.route, this.selectedpayment, this.customer});
   @override
   State<StatefulWidget> createState() {
-    return AddNewPaymentState(route: this.route, customer: this.customer);
+    return AddNewPaymentState(
+        route: this.route,
+        selectedpayment: this.selectedpayment,
+        customer: this.customer);
   }
 }
 
 class AddNewPaymentState extends State<AddNewPayment> {
   final String route;
   final Customers customer;
-  AddNewPaymentState({@required this.route, this.customer});
+  final Payments selectedpayment;
+  AddNewPaymentState(
+      {@required this.route, this.selectedpayment, this.customer});
   var formKey = GlobalKey<FormState>();
   Payments payment = new Payments();
-  TextEditingController customerID = new TextEditingController();
-  TextEditingController customerFullName = new TextEditingController();
-  TextEditingController service = new TextEditingController();
+  TextEditingController customerID;
+  TextEditingController customerFullName;
+  TextEditingController service;
+  TextEditingController amount;
 
   Widget spacer({double height = 27}) {
     return SizedBox(
@@ -50,6 +57,23 @@ class AddNewPaymentState extends State<AddNewPayment> {
           context: context,
           content: "Payment successfully Added",
           title: "New Payment");
+    });
+  }
+
+  void updatingPayment() {
+    this.selectedpayment.amount = amount.text;
+    this.selectedpayment.customerID = customerID.text;
+    this.selectedpayment.service = service.text;
+    this.selectedpayment.amount = this.amount.text;
+    Provider.of<PaymentController>(context, listen: false)
+        .updatePayment(this.selectedpayment);
+    Utils.showpinnerDialog(context: context, text: 'Updating Payment...');
+    Timer(Duration(milliseconds: 500), () {
+      Navigator.of(context).pop();
+      Utils.simpleAlert(
+          context: context,
+          content: "Payment successfully Updated",
+          title: "Payment Updated");
     });
   }
 
@@ -139,7 +163,8 @@ class AddNewPaymentState extends State<AddNewPayment> {
           this.showCustomers();
         },
         isReadOnly: true,
-        isEnabled: this.route == 'profile' ? false : true,
+        isEnabled:
+            this.route == 'profile' || this.route == 'update' ? false : true,
         onSaved: (value) {
           this.payment.customerID = value;
         },
@@ -176,6 +201,7 @@ class AddNewPaymentState extends State<AddNewPayment> {
       ),
       this.spacer(),
       AllBorderField(
+        controller: this.amount,
         action: TextInputAction.done,
         hint: "Amount ${Utils.ghanaCedi()}",
         type: TextInputType.number,
@@ -193,11 +219,17 @@ class AddNewPaymentState extends State<AddNewPayment> {
       ),
       this.spacer(),
       CustomButton(
-        text: "Save",
+        text: this.route != 'update' ? "Save" : 'Update Payment',
         onClicked: () {
-          if (this.formKey.currentState.validate()) {
-            this.formKey.currentState.save();
-            this.addingNewPayment();
+          if (this.route != "update") {
+            if (this.formKey.currentState.validate()) {
+              this.formKey.currentState.save();
+              this.addingNewPayment();
+            }
+          } else {
+            if (this.formKey.currentState.validate()) {
+              this.updatingPayment();
+            }
           }
         },
       ),
@@ -222,7 +254,33 @@ class AddNewPaymentState extends State<AddNewPayment> {
   @override
   void initState() {
     super.initState();
+    this.initTextfieldsValuesForUpdate();
     this.initValues();
+  }
+
+  initTextfieldsValuesForUpdate() {
+    if (this.route == "update") {
+      this.customerID =
+          new TextEditingController(text: this.selectedpayment.customerID);
+      this.service =
+          new TextEditingController(text: this.selectedpayment.service);
+      this.amount =
+          new TextEditingController(text: this.selectedpayment.amount);
+      this.customerFullName =
+          new TextEditingController(text: this.customer.fullName);
+    } else if (this.route == "profile") {
+      this.customerID =
+          new TextEditingController(text: this.customer.customerID);
+      this.service = new TextEditingController();
+      this.amount = new TextEditingController();
+      this.customerFullName =
+          new TextEditingController(text: this.customer.fullName);
+    } else {
+      this.customerID = new TextEditingController();
+      this.customerFullName = new TextEditingController();
+      this.service = new TextEditingController();
+      this.amount = new TextEditingController();
+    }
   }
 
   initValues() {
@@ -236,15 +294,18 @@ class AddNewPaymentState extends State<AddNewPayment> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("New Payment"),
+          title:
+              Text(this.route != "update" ? "New Payment" : "Update Payment"),
           actions: [
             IconButton(
                 splashRadius: 20,
                 icon: Icon(Icons.person_add_alt_1_rounded),
-                onPressed: () {
-                  Utils.navigation(
-                      context: context, destination: AddNewCustomer());
-                })
+                onPressed: this.route != "update"
+                    ? () {
+                        Utils.navigation(
+                            context: context, destination: AddNewCustomer());
+                      }
+                    : null)
           ],
         ),
         body: SingleChildScrollView(

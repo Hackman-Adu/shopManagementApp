@@ -14,9 +14,28 @@ class PaymentController extends ChangeNotifier {
     return this._isLoading;
   }
 
+  double get totalPayment {
+    double total = 0;
+    this.payments.forEach((payment) {
+      double d = double.parse(payment.amount);
+      total += d;
+    });
+    return total;
+  }
+
   void addNewPayment(Payments payment) {
     this.payments.insert(0, payment);
     notifyListeners();
+  }
+
+  void updatePayment(Payments payment) {
+    var index = this.getUpdatePaymentIndex(payment);
+    this.payments[index] = payment;
+    notifyListeners();
+  }
+
+  int getUpdatePaymentIndex(Payments payment) {
+    return this.payments.indexOf(payment);
   }
 
   void deletePayment(Payments payment) {
