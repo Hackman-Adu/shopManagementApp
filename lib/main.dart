@@ -19,6 +19,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Divas Beauty Shop',
         theme: ThemeData(
+          fontFamily: "OpenSans-Regular",
           textButtonTheme: TextButtonThemeData(
               style: ButtonStyle(
                   foregroundColor:

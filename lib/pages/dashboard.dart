@@ -111,7 +111,7 @@ class DashBoardState extends State<DashBoard>
                               Text(
                                 menu.name,
                                 style: TextStyle(
-                                    fontSize: 17,
+                                    fontSize: 15.5,
                                     color: Colors.black.withOpacity(0.75)),
                               )
                             ],

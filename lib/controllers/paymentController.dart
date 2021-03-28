@@ -5,7 +5,6 @@ import 'package:flutter/cupertino.dart';
 class PaymentController extends ChangeNotifier {
   bool _isLoading = true;
   List<Payments> payments = [];
-
   PaymentController() {
     this.getPayments();
   }
@@ -24,7 +23,11 @@ class PaymentController extends ChangeNotifier {
   }
 
   void addNewPayment(Payments payment) {
-    this.payments.insert(0, payment);
+    if (this.payments.length > 0) {
+      this.payments.insert(0, payment);
+    } else {
+      this.payments.add(payment);
+    }
     notifyListeners();
   }
 

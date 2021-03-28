@@ -167,8 +167,8 @@ class LoginState extends State<Login> with SingleTickerProviderStateMixin {
                           child: Text(
                             Utils.shopName,
                             style: TextStyle(
-                                fontSize: 45,
-                                fontFamily: "Redressed-Regular",
+                                fontSize: 30,
+                                fontFamily: "Anton-Regular",
                                 color: Colors.white),
                           ),
                         ),

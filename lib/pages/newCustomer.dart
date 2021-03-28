@@ -184,7 +184,7 @@ class AddNewCustomerState extends State<AddNewCustomer> {
         label: "Telephone 1 (+233)",
         maxLength: 9,
         onSaved: (value) {
-          this.customer.telephone = "+233 " + value;
+          this.customer.telephone = value;
         },
         validator: (value) {
           if (value.trim() == '') {

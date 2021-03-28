@@ -127,9 +127,13 @@ class AddNewPaymentState extends State<AddNewPayment> {
                               backgroundImage: AssetImage(customer.image),
                             )
                           : CircleAvatar(
+                              backgroundColor: Utils.kDarkPrimaryColor,
                               child: Center(
-                                child:
-                                    Text(Utils.getInitials(customer.fullName)),
+                                child: Text(
+                                    Utils.getInitials(customer.fullName),
+                                    style: TextStyle(
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.bold)),
                               ),
                             ),
                       onTap: () {

@@ -276,7 +276,7 @@ class CustomerProfileState extends State<CustomerProfile> {
       itemSpacer(),
       Divider(),
       itemSpacer(),
-      buildItemRow("Telephone 1", customer.telephone, Icons.phone),
+      buildItemRow("Telephone 1", "+233 " + customer.telephone, Icons.phone),
       itemSpacer(),
       Divider(),
       itemSpacer(),

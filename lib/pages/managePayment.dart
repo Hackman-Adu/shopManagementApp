@@ -126,7 +126,7 @@ class ManagePaymentState extends State<ManagePayments> {
   Widget build(BuildContext context) {
     var controller = Provider.of<PaymentController>(context);
     var customer = Provider.of<CustomersControllers>(context);
-
+    print(controller.payments.length);
     return Scaffold(
         appBar: AppBar(
           title: Text("Payments"),
@@ -140,7 +140,8 @@ class ManagePaymentState extends State<ManagePayments> {
                           children: [
                             Text(
                               "New Payment",
-                              style: TextStyle(color: Colors.white),
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 17),
                             ),
                             SizedBox(width: 5),
                             Icon(Icons.add),
@@ -173,48 +174,46 @@ class ManagePaymentState extends State<ManagePayments> {
 
                         return Column(children: [
                           ListTile(
-                            onTap: () {
-                              if (index != -1) {
-                                this.showOptions(payment, cus[0]);
-                              } else {
-                                Utils.simpleAlert(
-                                    context: context,
-                                    content: "Customer has been deleted",
-                                    title: "Customer Not Found");
-                              }
-                            },
-                            isThreeLine: true,
-                            title: index != -1
-                                ? Text(
-                                    cus[0].fullName,
-                                    style: TextStyle(fontSize: 17),
-                                  )
-                                : Text("Customer Not Found",
-                                    style: TextStyle(
-                                        fontSize: 17, color: Colors.redAccent)),
-                            trailing: Text(
-                              Utils.ghanaCedi() + payment.amount,
-                              style: TextStyle(
-                                  fontSize: 17.5,
-                                  color: Utils.kPrimaryColor,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            subtitle: RichText(
-                              text: TextSpan(children: [
-                                TextSpan(
-                                    text:
-                                        Utils.getDateTime(payment.date) + '\n',
-                                    style: TextStyle(
-                                        fontSize: 13,
-                                        color: Utils.kDarkPrimaryColor)),
-                                TextSpan(
-                                    text: payment.service,
+                              onTap: () {
+                                if (index != -1) {
+                                  this.showOptions(payment, cus[0]);
+                                } else {
+                                  Utils.simpleAlert(
+                                      context: context,
+                                      content: "Customer has been deleted",
+                                      title: "Customer Not Found");
+                                }
+                              },
+                              isThreeLine: true,
+                              title: index != -1
+                                  ? Text(
+                                      cus[0].fullName,
+                                      style: TextStyle(fontSize: 17),
+                                    )
+                                  : Text("Customer Not Found",
+                                      style: TextStyle(
+                                          fontSize: 17,
+                                          color: Colors.redAccent)),
+                              trailing: Text(
+                                Utils.ghanaCedi() + payment.amount,
+                                style: TextStyle(
+                                    fontSize: 17.5,
+                                    color: Utils.kPrimaryColor,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(Utils.getDateTime(payment.date)),
+                                  SizedBox(height: 7),
+                                  Text(
+                                    payment.service,
                                     style: TextStyle(
                                         fontSize: 17,
-                                        color: Utils.kDarkPrimaryColor))
-                              ]),
-                            ),
-                          ),
+                                        fontStyle: FontStyle.italic),
+                                  )
+                                ],
+                              )),
                           Divider()
                         ]);
                       }).toList(),

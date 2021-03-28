@@ -1,4 +1,5 @@
 import 'package:beautyShop/controllers/customersController.dart';
+import 'package:beautyShop/pages/addPayment.dart';
 import 'package:beautyShop/pages/newCustomer.dart';
 import 'package:flutter/material.dart';
 import 'package:beautyShop/utils/utils.dart';
@@ -25,18 +26,13 @@ class HomeState extends State<Home> {
               margin: EdgeInsets.symmetric(vertical: 5),
               child: Column(children: [
                 ListTile(
+                  trailing: Icon(Icons.chevron_right_rounded),
                   onTap: () {
-                    Utils.navigation(
-                        context: context,
-                        destination: CustomerProfile(
-                          customer: customer,
-                        ));
+                    this.viewOptions(customer);
                   },
                   title: Text(
                     customer.fullName.toUpperCase(),
-                    style: TextStyle(
-                      fontSize: 15,
-                    ),
+                    style: TextStyle(fontSize: 15),
                   ),
                   subtitle: Text(customer.address),
                   leading: customer.image.trim() != ''
@@ -52,7 +48,9 @@ class HomeState extends State<Home> {
                           child: Center(
                             child: Text(
                               Utils.getInitials(customer.fullName),
-                              style: TextStyle(color: Colors.white),
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
                             ),
                           ),
                           decoration: BoxDecoration(
@@ -69,6 +67,46 @@ class HomeState extends State<Home> {
         }).toList()
       ],
     );
+  }
+
+  void viewOptions(Customers customer) {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return Container(
+              child: Wrap(
+            children: [
+              ListTile(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Utils.navigation(
+                        context: context,
+                        destination: AddNewPayment(
+                            route: 'profile', customer: customer));
+                  },
+                  leading: Icon(Icons.payment_rounded),
+                  title: Text(
+                    "Add Payment",
+                  )),
+              ListTile(
+                  leading: Icon(Icons.payments_rounded),
+                  title: Text(
+                    "View Payments",
+                  )),
+              ListTile(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Utils.navigation(
+                        context: context,
+                        destination: CustomerProfile(customer: customer));
+                  },
+                  leading: Icon(Icons.person),
+                  title: Text(
+                    "Profile",
+                  )),
+            ],
+          ));
+        });
   }
 
 //header widget

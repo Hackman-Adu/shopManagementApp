@@ -58,11 +58,11 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-    - family: ShipporiMincho-Regular
+    - family: OpenSans-Regular
       fonts:
-        - asset: assets/fonts/ShipporiMincho-Regular.ttf
-    - family: Redressed-Regular
+        - asset: assets/fonts/OpenSans-Regular.ttf
+    - family: Anton-Regular
       fonts:
-        - asset: assets/fonts/Redressed-Regular.ttf
+        - asset: assets/fonts/Anton-Regular.ttf
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

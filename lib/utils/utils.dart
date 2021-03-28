@@ -9,15 +9,6 @@ class Utils {
   static const Color kPrimaryColor = Color(0XFFFFC766A);
   static const Color kDarkPrimaryColor = Color(0XFFFca5348);
   static const String shopName = "Divas Beauty Shop";
-  static const String family = "ShipporiMincho-Regular";
-
-//static style for the menu(Navigation drawer) items
-  static TextStyle menuTextStyle() {
-    return TextStyle(
-      color: Colors.black.withOpacity(0.80),
-      fontSize: 15,
-    );
-  }
 
   static Widget checkBox() {
     return Container(
@@ -56,7 +47,7 @@ class Utils {
   }
 
   static String ghanaCedi() {
-    return "GH" + String.fromCharCode(0x20B5);
+    return "GHC";
   }
 
   static String getDateTime(String date) {
@@ -263,7 +254,7 @@ class Utils {
   }
 
   static String getInitials(String name) {
-    var array = name.split(' ');
+    var array = name.trim().split(' ');
     var first = '';
     var last = '';
     if (array.length > 1) {

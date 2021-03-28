@@ -14,6 +14,26 @@ class CustomersControllers extends ChangeNotifier {
     return this._isLoading;
   }
 
+  int get numberOfMales {
+    return this
+        .customers
+        .where((customer) {
+          return customer.gender.toLowerCase() == "male";
+        })
+        .toList()
+        .length;
+  }
+
+  int get numberOfFemales {
+    return this
+        .customers
+        .where((customer) {
+          return customer.gender.toLowerCase() == "female";
+        })
+        .toList()
+        .length;
+  }
+
   void addNewCustomers(Customers customer) {
     this.customers.insert(0, customer);
     notifyListeners();
